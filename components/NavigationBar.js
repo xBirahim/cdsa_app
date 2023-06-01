@@ -6,7 +6,7 @@ const NavigationBar = ({ children }) => {
   const router = useRouter();
 
   return (
-    <Navbar isCompact isBordered variant="sticky">
+    <Navbar isCompact isBordered variant="sticky" css={{width: "100%"}}>
       <Navbar.Brand>
         <Text onClick={() => { router.push("#") }} b color="inherit" hideIn="xs">
           MSPR
