@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
       <main>
-        <p>YESSS</p>
+        <p>hello kys</p>
       </main>
     </>
   );
