@@ -9,28 +9,30 @@ import { Grid, Badge, Button, Card, Row, Text, Col } from "@nextui-org/react";
 //     );
 //   };
 
-const Product = ({text, price, imageLink }) => {
+const Product = ({ text, price, imageLink }) => {
   return (
     <>
-        <Card isPressable isHoverable>
-          <Card.Body css={{ p: 0 }}>
-            <Card.Image
-              src="https://nextui.org/images/card-example-6.jpeg"
-              objectFit="cover"
-              width="100%"
-              height={140}
-              alt={""}
-            />
-          </Card.Body>
-          <Card.Footer css={{ justifyItems: "flex-start" }}>
-            <Row wrap="wrap" justify="space-between" align="center">
-              <Text b>{text}</Text>
-              <Text css={{ color: "$accents7", fontWeight: "$semibold", fontSize: "$sm" }}>
-                {`${price} $`}
-              </Text>
-            </Row>
-          </Card.Footer>
-        </Card>
+      <Card isPressable isHoverable css={{ height: "200px", width: "400px", minHeight: "150px", minWidth: "300px"}}>
+        <Card.Body css={{ p: 0 }}>
+          <Card.Image
+            showSkeleton
+            src="https://th.bing.com/th/id/OIP.sexu7DhkQ6zvPDthHS34MgHaHa?pid=ImgDet&rs=1"
+            objectFit="cover"
+            width="100%"
+            height="100%"
+            alt={""}
+          />
+        </Card.Body>
+        <Card.Divider />
+        <Card.Footer css={{ justifyItems: "flex-start" }}>
+          <Row wrap="wrap" justify="space-between" align="center">
+            <Text b>{text}</Text>
+            <Text b css={{ color: "#006EFF", fontWeight: "$bold", fontSize: "$sm" }}>
+              {`${price}`}
+            </Text>
+          </Row>
+        </Card.Footer>
+      </Card>
     </>
   )
 }

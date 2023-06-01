@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Product from "components/product"
-import { Grid, Spacer } from "@nextui-org/react";
+import { Badge, Grid, Spacer } from "@nextui-org/react";
 
 export default function Profile() {
 
@@ -59,9 +59,12 @@ export default function Profile() {
       <Grid.Container gap={2} justify="flex-start">
         {list.map((item, index) => (
           <Grid xs={6} sm={3} key={index}>
-            <Product text={item.title} price={item.price} />
-            <Spacer y={2} />
+            <Badge content="new" css={{bg: "red"}}>
+            <Product text={item.title} price={item.price}/>
+            </Badge>
+            <Spacer y={2}/>
           </Grid>
+          
         ))}
       </Grid.Container>
     </>
