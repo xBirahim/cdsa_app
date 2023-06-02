@@ -6,10 +6,11 @@ const NavigationBar = ({ children }) => {
   const router = useRouter();
 
   return (
-    <Navbar isCompact isBordered variant="sticky" css={{width: "100%"}}>
+    <Navbar isCompact isBordered variant="sticky" css={{width: "100%", backgroundColor: "#4A2511"}}>
       <Navbar.Brand>
+        <link rel='icon' href='/favicon.ico' />
         <Text onClick={() => { router.push("#") }} b color="inherit" hideIn="xs">
-          MSPR
+          PAYE TON KAWA
         </Text>
       </Navbar.Brand>
       <Navbar.Content hideIn="xs" variant="underline">
@@ -17,12 +18,12 @@ const NavigationBar = ({ children }) => {
         <Navbar.Link href="#">Lien</Navbar.Link>
       </Navbar.Content>
       <Navbar.Content>
-        <Navbar.Link color="inherit" href="#">
+        <Navbar.Link color="inherit" href="login">
           Login
         </Navbar.Link>
         <Navbar.Item>
-          <Button auto flat as={Link} href="#">
-            Sign Up
+          <Button auto flat as={Link} href="register">
+          Register
           </Button>
         </Navbar.Item>
       </Navbar.Content>
