@@ -17,6 +17,18 @@ export class Service {
     //   },
     // };
 
-    return axios({method: 'POST', url: `${url}`, headers: header, data: body})
+    // return await axios.post(url, body, {
+    //   headers: {
+    //     // Overwrite Axios's automatically set Content-Type
+    //     "Content-Type": "application/json",
+    //   },
+    // });
+
+    return axios({
+      method: "POST",
+      url: `${url}`,
+      headers: {"Content-Type": "application/json; charset=utf-8" },
+      data: body,
+    });
   }
 }

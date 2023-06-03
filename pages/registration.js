@@ -30,17 +30,25 @@ export default function Registration() {
     return data;
   };
 
+  const getCurrentDate = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}${month}${day}`;
+  };
+
   const getDate = async (urlLink) => {
     Service.get(urlLink).then((r) => {
       console.log(r.data);
     });
   };
 
-  const sendMail = async (urlLink, body = "TEST MESSAGE") => {
+  const sendMail = async (urlLink, body) => {
     Service.post(
       urlLink,
       { "Content-Type": "application/json; charset=utf-8" },
-      body
+      JSON.stringify(body)
     ).then((r) => {
       console.log(r.data);
     });
@@ -147,7 +155,10 @@ export default function Registration() {
               color={Gradient.antineutral}
               onPress={() => {
                 // getDate("https://localhost:7063/api/tool/date");
-                // sendMail("https://localhost:7063/api/tool/print", email);
+                sendMail("https://localhost:7063/api/tool/print",JSON.stringify({
+                  "mail": email,
+                  "key": getCurrentDate(),
+                }));
                 handler();
               }}
             >
