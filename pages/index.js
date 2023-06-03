@@ -22,7 +22,7 @@ export default function Home() {
               Paye ton kawa
             </Text>
             <Text weight={"bold"} size={40} css={{ textAlign: "center" }}>
-              Le café c'est la vie
+              {"Le café c'est la vie"}
             </Text>
           </Col>
         </Grid>

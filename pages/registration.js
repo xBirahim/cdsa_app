@@ -9,7 +9,7 @@ import {
   Checkbox,
   Container,
   Link,
-  Modal
+  Modal,
 } from "@nextui-org/react";
 import Gradient from "components/Themes";
 import { ChevronLeft } from "react-iconly";
@@ -18,11 +18,10 @@ import axiosRetry from "axios-retry";
 import { Service } from "tools/service";
 import Camera from "./camera";
 
-axiosRetry(axios, { retries: 5 });
-// Exponential back-off retry delay between requests
-axiosRetry(axios, { retryDelay: axiosRetry.exponentialDelay });
-
-export default function registration() {
+export default function Registration() {
+  axiosRetry(axios, { retries: 5 });
+  // Exponential back-off retry delay between requests
+  axiosRetry(axios, { retryDelay: axiosRetry.exponentialDelay });
   // MAIL ET API
   const [email, setEmail] = useState("");
 
@@ -149,7 +148,7 @@ export default function registration() {
               onPress={() => {
                 // getDate("https://localhost:7063/api/tool/date");
                 // sendMail("https://localhost:7063/api/tool/print", email);
-                handler();  
+                handler();
               }}
             >
               Sign in
