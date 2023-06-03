@@ -9,12 +9,53 @@ import {
   Checkbox,
   Container,
   Link,
+  Modal
 } from "@nextui-org/react";
 import Gradient from "components/Themes";
 import { ChevronLeft } from "react-iconly";
+import axios from "axios";
+import axiosRetry from "axios-retry";
+import { Service } from "tools/service";
+import Camera from "./camera";
+
+axiosRetry(axios, { retries: 5 });
+// Exponential back-off retry delay between requests
+axiosRetry(axios, { retryDelay: axiosRetry.exponentialDelay });
 
 export default function registration() {
+  // MAIL ET API
   const [email, setEmail] = useState("");
+
+  const apicall = async (url) => {
+    const { data } = await axios(`${url}`);
+    return data;
+  };
+
+  const getDate = async (urlLink) => {
+    Service.get(urlLink).then((r) => {
+      console.log(r.data);
+    });
+  };
+
+  const sendMail = async (urlLink, body = "TEST MESSAGE") => {
+    Service.post(
+      urlLink,
+      { "Content-Type": "application/json; charset=utf-8" },
+      body
+    ).then((r) => {
+      console.log(r.data);
+    });
+  };
+
+  // CAMERA
+
+  const [visible, setVisible] = useState(false);
+  const handler = () => setVisible(true);
+
+  const closeHandler = () => {
+    setVisible(false);
+    console.log("closed");
+  };
 
   return (
     <>
@@ -105,12 +146,34 @@ export default function registration() {
             <Spacer y={1} />
             <Button
               color={Gradient.antineutral}
-              onPress={(e) => {
-                console.log(email);
+              onPress={() => {
+                // getDate("https://localhost:7063/api/tool/date");
+                // sendMail("https://localhost:7063/api/tool/print", email);
+                handler();  
               }}
             >
               Sign in
             </Button>
+            <Modal
+              closeButton
+              aria-labelledby="modal-title"
+              open={visible}
+              onClose={closeHandler}
+            >
+              <Modal.Body>
+                <Text b size={40} justify={"center"}>
+                  CAMERA
+                </Text>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button auto flat color="error" onPress={closeHandler}>
+                  Close
+                </Button>
+                <Button auto onPress={closeHandler}>
+                  Sign in
+                </Button>
+              </Modal.Footer>
+            </Modal>
           </Card>
         </Container>
       </div>
