@@ -39,8 +39,7 @@ export default function Profile() {
       price: "$12.20",
     },
   ];
-
-
+  
   const router = useRouter();
 
   useEffect(() => {

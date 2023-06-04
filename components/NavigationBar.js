@@ -1,12 +1,11 @@
 import { Button, Input, Link, Navbar, Text, Spacer } from "@nextui-org/react";
 import { useRouter } from "next/router";
-
 const NavigationBar = ({ children }) => {
 
   const router = useRouter();
 
   return (
-    <Navbar isCompact isBordered variant="sticky" css={{width: "100%", backgroundColor: "#4A2511"}}>
+    <Navbar isCompact isBordered variant="sticky" css={{width: "100%", backgroundColor: "#4A2511", marginBottom: '-35px'}}>
       <Navbar.Brand>
         <link rel='icon' href='/favicon.ico' />
         <Text onClick={() => { router.push("#") }} b color="inherit" hideIn="xs">
