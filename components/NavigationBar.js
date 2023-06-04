@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Button, Link, Navbar, Text, Popover } from "@nextui-org/react";
 import { useRouter } from "next/router";
+const NavigationBar = ({ children }) => {
 
-const NavigationBar = () => {
   const router = useRouter();
   const [cartCount, setCartCount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
@@ -18,7 +18,7 @@ const NavigationBar = () => {
   };
 
   return (
-    <Navbar isCompact isBordered variant="sticky" css={{ width: "100%", backgroundColor: "#4A2511" }}>
+    <Navbar isCompact isBordered variant="sticky" css={{width: "100%", backgroundColor: "#4A2511", marginBottom: '-35px'}}>
       <Navbar.Brand>
         <link rel="icon" href="/favicon.ico" />
         <Text onClick={() => router.push("#")} b color="inherit" hideIn="xs">

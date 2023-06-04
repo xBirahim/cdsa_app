@@ -34,9 +34,9 @@ export default function Profile() {
       height={150}
       src='https://static.vecteezy.com/ti/vecteur-libre/p3/585577-tasse-a-cafe-logo-template-vector-icon-design-gratuit-vectoriel.jpg'
       alt="DefaultImage"
-      css={{ marginTop: '-70px'}}
+      css={{ marginTop: '-30px'}}
     />
-      <Container display="flex" alignItems="center" justify="center" css={{ marginTop: '-155px'}}>
+      <Container display="flex" alignItems="center" justify="center" css={{ marginTop: '-65px'}}>
         <Card css={{ mw: '420px', p: '20px' }}>
           <Text size={24}  weight="bold" css={{ as: 'center', mb: '20px' }}> LOG IN </Text>         
           <Spacer y={1} />
