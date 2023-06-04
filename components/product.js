@@ -1,40 +1,66 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Badge, Button, Card, Row, Text, Col } from "@nextui-org/react";
+import { Grid, Badge, Card, Row, Text, Col, Divider } from "@nextui-org/react";
 
-// const Product = ({ text, size }) => {
-//     return (
-//       <Card>
-//         <Text size={size}>{text}</Text>
-//       </Card>
-//     );
-//   };
+const Product = ({ text, price, imageLink, description, onAddToCart }) => {
+  useEffect(() => {
+    document.body.style.backgroundColor = "#D2B48C";
+  }, []);
 
-const Product = ({ text, price, imageLink }) => {
+  const [quantity, setQuantity] = useState(0);
+
+  const incrementQuantity = () => {
+    setQuantity((prevQuantity) => prevQuantity + 1);
+  };
+
+  const decrementQuantity = () => {
+    if (quantity > 0) {
+      setQuantity((prevQuantity) => prevQuantity - 1);
+    }
+  };
+
+  const handleAddToCart = () => {
+    if (typeof onAddToCart === "function") {
+      onAddToCart({ text, price, quantity });
+    }
+  };
+
   return (
     <>
-      <Card isPressable isHoverable css={{ height: "200px", width: "400px", minHeight: "150px", minWidth: "300px"}}>
-        <Card.Body css={{ p: 0 }}>
+      <Card isPressable isHoverable css={{ height: "300px", width: "250px", minHeight: "150px", minWidth: "300px" }}>
+        <Card.Body css={{ display: "flex", flexDirection: "column", alignItems: "flex-start", p: 0 }}>
           <Card.Image
             showSkeleton
-            src="https://th.bing.com/th/id/OIP.sexu7DhkQ6zvPDthHS34MgHaHa?pid=ImgDet&rs=1"
+            src={imageLink || "https://media3.coffee-webstore.com/22681-home_default/cafe-en-grains-caffe-corsini-espresso-1kg.jpg"}
             objectFit="cover"
             width="100%"
             height="100%"
             alt={""}
           />
-        </Card.Body>
-        <Card.Divider />
-        <Card.Footer css={{ justifyItems: "flex-start" }}>
-          <Row wrap="wrap" justify="space-between" align="center">
-            <Text b>{text}</Text>
-            <Text b css={{ color: "#006EFF", fontWeight: "$bold", fontSize: "$sm" }}>
-              {`${price}`}
-            </Text>
+          <Text p css={{ fontSize: "10px", marginTop: "10px" }}>{description}</Text>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+            <div>
+              <Text b css={{ fontSize: "14px", fontWeight: "bold", marginBottom: "2px" }}>{text}</Text>
+              <Text css={{ fontSize: "15px", marginBottom: "2px", color: "#006EFF", fontWeight: "bold" }}>{`${price} €`}</Text>
+            </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <button onClick={incrementQuantity} style={{ backgroundColor: "#ADD8E6", color: "#FFFFFF", padding: "3px 8px", border: "none", borderRadius: "5px" }}>
+                +
+              </button>
+              <span style={{ margin: "0 5px" }}>{quantity}</span>
+              <button onClick={decrementQuantity} style={{ backgroundColor: "#ADD8E6", color: "#FFFFFF", padding: "3px 8px", border: "none", borderRadius: "5px" }}>
+                -
+              </button>
+            </div>
+          </div>
+          <Row justify="center" align="center" css={{ marginTop: "10px" }}>
+            <button onClick={handleAddToCart} style={{ backgroundColor: "#ADD8E6", color: "#FFFFFF", padding: "5px 10px", border: "none", borderRadius: "5px" }}>
+              Ajouter au panier
+            </button>
           </Row>
-        </Card.Footer>
+        </Card.Body>
       </Card>
     </>
-  )
-}
+  );
+};
 
 export default Product;

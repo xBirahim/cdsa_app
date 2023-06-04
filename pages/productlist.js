@@ -1,70 +1,52 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Product from "components/product"
+import Product from "components/product";
 import { Badge, Grid, Spacer } from "@nextui-org/react";
 
 export default function Profile() {
-
-  const list = [
-    {
-      title: "Orange",
-      price: "$5.50",
-    },
-    {
-      title: "Tangerine",
-      price: "$3.00",
-    },
-    {
-      title: "Cherry",
-      price: "$10.00",
-    },
-    {
-      title: "Lemon",
-      price: "$5.30",
-    },
-    {
-      title: "Avocado",
-      price: "$15.70",
-    },
-    {
-      title: "Lemon 2",
-      price: "$8.00",
-    },
-    {
-      title: "Banana",
-      price: "$7.50",
-    },
-    {
-      title: "Watermelon",
-      price: "$12.20",
-    },
-  ];
-
-
+  const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
     const getData = async () => {
-
+      try {
+        const response = await fetch(
+          "https://615f5fb4f7254d0017068109.mockapi.io/api/v1/products"
+        );
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.log(
+          "Une erreur s'est produite lors de la récupération des données de l'API:",
+          error
+        );
+      }
     };
 
     if (router.isReady) {
       getData();
     }
-
   }, [router.isReady]);
+
+  const handleAddToCart = (item) => {
+    setCartItems((prevItems) => [...prevItems, item]);
+  };
 
   return (
     <>
       <Grid.Container gap={2} justify="flex-start">
-        {list.map((item, index) => (
-          <Grid xs={6} sm={3} key={index}>
-            <Badge content="new" css={{bg: "red"}}>
-            <Product text={item.title} price={item.price}/>
-            </Badge>
-            <Spacer y={2}/>
+        {products.map((product) => (
+          <Grid xs={6} sm={3} key={product.id}>
+            <Product
+              text={product.name}
+              price={product.details.price}
+              description={product.details.description}
+              imageLink={product.imageLink}
+              onAddToCart={handleAddToCart}
+            />
+            <Spacer y={2} />
           </Grid>
-          
         ))}
       </Grid.Container>
     </>
