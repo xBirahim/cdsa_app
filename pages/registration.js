@@ -10,6 +10,7 @@ import {
   Container,
   Link,
   Modal,
+  useInput,
 } from "@nextui-org/react";
 import Gradient from "components/Themes";
 import { ChevronLeft } from "react-iconly";
@@ -23,19 +24,20 @@ export default function Registration() {
   // Exponential back-off retry delay between requests
   axiosRetry(axios, { retryDelay: axiosRetry.exponentialDelay });
   // MAIL ET API
-  const [email, setEmail] = useState("");
-
-  const apicall = async (url) => {
-    const { data } = await axios(`${url}`);
-    return data;
-  };
+  // const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [email, setEmail] = useState("")
 
   const getCurrentDate = () => {
     const date = new Date();
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
-    return `${year}${month}${day}`;
+    const hour = date.getHours();
+    const min = date.getMinutes();
+    const sec = date.getSeconds();
+    return `${year}${month}${day}${hour}${min}${sec}`;
   };
 
   const getDate = async (urlLink) => {
@@ -62,6 +64,42 @@ export default function Registration() {
   const closeHandler = () => {
     setVisible(false);
     console.log("closed");
+  };
+
+  // Validation du mail
+
+  const { value, reset, bindings } = useInput("");
+  
+  const validateEmail = (value) => {   
+    return value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
+  };
+
+  // const helper = React.useMemo(() => {
+  //   if (!value) {
+  //     return {
+  //       text: "",
+  //       color: "",
+  //     };
+  //   }
+  //   const isValid = validateEmail(value);
+  //   return {
+  //     text: isValid ? "" : "Enter a valid email",
+  //     color: isValid ? "success" : "error",
+  //   };
+  // }, [value]);
+
+  // // Validation du mot de passe
+
+  // const validatePassword = (password) => {
+  //   // Vérifiez si le mot de passe a au moins 8 caractères, une majuscule et un caractère spécial
+  //   const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
+  //   return passwordRegex.test(password);
+  // };
+
+  // Hash du mot de passe
+
+  const hashAndSaltPassword = (password) => {
+    setPasswordConfirm(password);
   };
 
   return (
@@ -107,10 +145,11 @@ export default function Registration() {
               Registration
             </Text>
             <Input
+              // {...bindings}
               clearable
               underlined
               fullWidth
-              color="primary"
+              color="success"
               size="lg"
               aria-label="Email"
               placeholder="Email"
@@ -130,18 +169,24 @@ export default function Registration() {
               placeholder="Password"
               css={{ mb: "6px" }}
               type="password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
             />
             <Spacer y={1} />
             <Input
               clearable
               underlined
               fullWidth
-              color="primary"
+              color="error"
               size="lg"
               aria-label="Confirm password"
               placeholder="Confirm password"
               css={{ mb: "6px" }}
               type="password"
+              onChange={(e) => {
+                setPasswordConfirm(e.target.value);
+              }}
             />
             <Spacer y={2} />
             <Row justify="space-between">
@@ -155,11 +200,18 @@ export default function Registration() {
               color={Gradient.antineutral}
               onPress={() => {
                 // getDate("https://localhost:7063/api/tool/date");
-                sendMail("https://localhost:7063/api/tool/print",JSON.stringify({
-                  "mail": email,
-                  "key": getCurrentDate(),
-                }));
-                handler();
+
+                if (validateEmail(email)) {
+                  sendMail(
+                    "https://localhost:7063/api/tool/print",
+                    JSON.stringify({
+                      mail: email,
+                      key: getCurrentDate(),
+                      passwordHash: password
+                    })
+                  );
+                  handler();
+                }
               }}
             >
               Sign in
