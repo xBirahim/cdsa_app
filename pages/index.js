@@ -8,7 +8,7 @@ import { Carousel } from 'react-responsive-carousel';
 import { Button, Row, Spacer, Avatar, Grid, Text, Dropdown, Container, Card} from '@nextui-org/react';
 import Profile from "./productlist";
 import { User } from "@nextui-org/react";
-
+import Slider from 'react-slick';
 export default class NextJsCarousel extends Component {
   render() {
     const text = "Paye ton KAWA car le café c'est la vie";
@@ -101,7 +101,19 @@ export default class NextJsCarousel extends Component {
               <Card css={{width: "100%"}}>
                 <Text h1 size={30}  weight="bold" css={{ textGradient: "45deg, $yellow600 -20%, $red600 100%", mb: '10px', ml:'30%' }}>{text2}</Text>
                 <Text h3 size={15}  weight="bold" css={{ textGradient: "45deg, $yellow600 -20%, $red600 100%", mb: '10px', ml:'20%', mt:'-10px' }}>{text3}</Text>
-                <Profile />
+                <Slider {...settings}>
+                  {products.map((product) => (
+                    
+                  <div key={product.id}>
+                  {/* Afficher les détails du produit */}
+                  <h3>{product.name}</h3>
+                  <p>{product.description}</p>
+                  {/* Ajoutez plus d'éléments et de styles pour personnaliser l'affichage du produit */}
+                  </div>
+                  ))}
+                </Slider>
+                <caroussel>
+                <Profile /></caroussel>
               </Card>
             </Container>
             </div><Spacer y={1}/>
@@ -111,6 +123,7 @@ export default class NextJsCarousel extends Component {
             <Row>
               <div>
                <Carousel>
+                
                 <Card css={{ mw: '200px', p: '20px' }}>
                 <User src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="Ariana Wattson" pointer/>
                 <p>Lecafé bio est d'excellente qualité. Je vous le recommande</p></Card><Spacer x={1}/>
