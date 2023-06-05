@@ -54,7 +54,7 @@ export default function CameraTest() {
         justify="center"
         css={{ minHeight: "100vh" }}
       >
-        <Card height={100} width={100} css={{ maxHeight: 800, maxWidth: 400 }}>
+        <Card height={100} width={100} css={{ maxHeight: 400, maxWidth: 400 }}>
           <Card.Header>
             <Text b size={30}>
               Scan the QR Code

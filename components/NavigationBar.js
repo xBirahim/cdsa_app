@@ -21,7 +21,7 @@ const NavigationBar = () => {
 
       <Navbar.Collapse>
         <Navbar.CollapseItem key={1}>
-          <Link href="#">Home</Link>
+          <Link href="/">Home</Link>
         </Navbar.CollapseItem>
         <Navbar.CollapseItem key={2}>
           <Link href="#">About</Link>
@@ -29,7 +29,7 @@ const NavigationBar = () => {
       </Navbar.Collapse>
 
       <Navbar.Content>
-        <Navbar.Link color="inherit" href="#">
+        <Navbar.Link color="inherit" href="/login">
           Login
         </Navbar.Link>
         <Navbar.Item>
