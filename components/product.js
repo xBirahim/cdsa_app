@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Badge, Card, Row, Text, Col, Divider } from "@nextui-org/react";
 
-const Product = ({ text, price, imageLink, description, onAddToCart }) => {
+const Product = ({ text, price, imageLink, description, onAddToCart, id }) => {
   useEffect(() => {
     document.body.style.backgroundColor = "#D2B48C";
   }, []);
 
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1); // Modifié ici, initialisé à 1 au lieu de 0
 
   const incrementQuantity = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
   };
 
   const decrementQuantity = () => {
-    if (quantity > 0) {
+    if (quantity > 1) { // Modifié ici, vérifie que la quantité est supérieure à 1 avant de la décrémenter
       setQuantity((prevQuantity) => prevQuantity - 1);
     }
   };
 
   const handleAddToCart = () => {
     if (typeof onAddToCart === "function") {
-      onAddToCart({ text, price, quantity });
+      onAddToCart({ text, price, quantity, id }); // Ajoutez l'id du produit lors de l'ajout au panier
     }
   };
 

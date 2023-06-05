@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import Product from "components/product";
 import { Badge, Grid, Spacer } from "@nextui-org/react";
+import Product from "components/product";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export default function Profile() {
+const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const router = useRouter();
@@ -27,10 +29,40 @@ export default function Profile() {
     if (router.isReady) {
       getData();
     }
+
+    const savedCartItems = localStorage.getItem("cartItems");
+    if (savedCartItems) {
+      setCartItems(JSON.parse(savedCartItems));
+    }
   }, [router.isReady]);
 
-  const handleAddToCart = (item) => {
-    setCartItems((prevItems) => [...prevItems, item]);
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  useEffect(() => {
+    console.log("Panier mis à jour :", cartItems);
+  }, [cartItems]);
+
+  const handleAddToCart = (item, id) => {
+    const existingItem = cartItems.find((cartItem) => cartItem.id === id);
+    if (existingItem) {
+      setCartItems((prevItems) =>
+        prevItems.map((cartItem) =>
+          cartItem.id === id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        )
+      );
+      toast.success(`Article "${item.text}" ajouté au panier !`);
+      console.log("Produit ajouté :", item);
+      console.log("Panier mis à jour :", cartItems);
+    } else {
+      setCartItems((prevItems) => [...prevItems, { ...item, quantity: 1, id }]);
+      toast.success(`Article "${item.text}" ajouté au panier !`);
+      console.log("Produit ajouté :", item);
+      console.log("Panier mis à jour :", cartItems);
+    }
   };
 
   return (
@@ -43,12 +75,15 @@ export default function Profile() {
               price={product.details.price}
               description={product.details.description}
               imageLink={product.imageLink}
-              onAddToCart={handleAddToCart}
+              onAddToCart={(item) => handleAddToCart(item, product.id)}
             />
             <Spacer y={2} />
           </Grid>
         ))}
       </Grid.Container>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </>
   );
-}
+};
+
+export default ProductList;
