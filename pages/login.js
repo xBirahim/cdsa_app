@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Gradient from "components/Themes";
 import axios from "axios";
 import axiosRetry from "axios-retry";
-import { QrReader } from "react-qr-reader";
+import QrScanner from "react-qr-scanner";
 import { useRouter } from "next/router";
 import {
   Card,
@@ -49,6 +49,18 @@ export default function Login() {
     console.log(error);
   };
 
+  const handleScannerLoad = (scanner) => {
+    if (scanner) {
+      scanner.start();
+    }
+  };
+
+  const handleScannerUnload = (scanner) => {
+    if (scanner) {
+      scanner.stop();
+    }
+  };
+
   return (
     <>
       <Grid.Container css={{ minHeight: "100vh", bg: Gradient.neutral }}>
@@ -69,15 +81,15 @@ export default function Login() {
             </Button>
             <Card.Body css={{ minHeight: 200, minWidth: 200 }}>
               {startScan && (
-                <QrReader
-                  delay={1000}
-                  onError={handleScanError}
+                <QrScanner
                   onScan={handleScan}
-                  onResult={handleScan}
-                  style={{ width: "100vh" }}
+                  onError={handleScanError}
+                  onLoad={handleScannerLoad}
+                  onUnload={handleScannerUnload}
+                  style={{ width: "100%" }}
                 />
               )}
-            </Card.Body>{" "}
+            </Card.Body>
             <Checkbox>
               <Text size={14}>Remember me</Text>
             </Checkbox>
