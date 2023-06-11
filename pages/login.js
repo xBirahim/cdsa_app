@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import Gradient from "components/Themes";
 import axios from "axios";
 import axiosRetry from "axios-retry";
-import QrScanner from "react-qr-scanner";
+// import {QrScanner, QrReader} from "react-qr-scanner";
+import QrReader from "react-qr-scanner"
 import { useRouter } from "next/router";
 import {
   Card,
@@ -124,7 +125,12 @@ export default function Login() {
             </Button>
             <Card.Body css={{ minHeight: 200, minWidth: 200 }}>
               {startScan && (
-                <QrScanner
+                // facingMode: "user" ou "environment"
+                <QrReader
+                constraints={{
+                  audio: false,
+                  video: { facingMode: "user" }
+                }}
                   onScan={handleScan}
                   onError={handleScanError}
                   onLoad={handleScannerLoad}
