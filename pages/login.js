@@ -1,8 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Gradient from "components/Themes";
 import axios from "axios";
 import axiosRetry from "axios-retry";
-import { QrReader } from "react-qr-reader";
+import QrScanner from "react-qr-scanner";
 import { useRouter } from "next/router";
 import {
   Card,
@@ -77,6 +77,18 @@ export default function Login() {
     console.log(error);
   };
 
+  const handleScannerLoad = (scanner) => {
+    if (scanner) {
+      scanner.start();
+    }
+  };
+
+  const handleScannerUnload = (scanner) => {
+    if (scanner) {
+      scanner.stop();
+    }
+  };
+
   return (
     <>
       <Grid.Container css={{ minHeight: "100vh", bg: Gradient.neutral }}>
@@ -112,24 +124,13 @@ export default function Login() {
             </Button>
             <Card.Body css={{ minHeight: 200, minWidth: 200 }}>
               {startScan && (
-                <>
-                  <QrReader
-                    // facingMode={cameraSelected}
-                    delay={1000}
-                    onError={handleScanError}
-                    onScan={handleScan}
-                    onResult={handleScan}
-                    style={{ width: "100vh" }}
-                  />
-                  <Button
-                    rounded
-                    auto
-                    color="error"
-                    size={"xs"}
-                    icon={<Swap set="bold" primaryColor="blueviolet" />}
-                    onPress={switchCamera}
-                  ></Button>
-                </>
+                <QrScanner
+                  onScan={handleScan}
+                  onError={handleScanError}
+                  onLoad={handleScannerLoad}
+                  onUnload={handleScannerUnload}
+                  style={{ width: "100%" }}
+                />
               )}
             </Card.Body>
             <Checkbox>
