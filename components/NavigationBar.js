@@ -7,6 +7,7 @@ const NavigationBar = ({ children }) => {
   const [cartCount, setCartCount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [selectedContact, setSelectedContact] = useState("");
 
   const handleCartClick = () => {
     setIsPopoverOpen(!isPopoverOpen);
@@ -15,6 +16,21 @@ const NavigationBar = ({ children }) => {
   const handleAddToCart = (item) => {
     setCartItems((prevItems) => [...prevItems, item]);
     setCartCount((prevCount) => prevCount + item.quantity);
+  };
+
+  const handleContactChange = (e) => {
+    const selectedValue = e.target.value;
+    setSelectedContact(selectedValue);
+
+    if (selectedValue === "clients") {
+      router.push("/users"); // Rediriger vers la page des clients
+    } else if (selectedValue === "revendeurs") {
+      router.push("/revendeurs"); // Rediriger vers la page des revendeurs
+    }
+  };
+
+  const handleHomeClick = () => {
+    router.push("/"); // Rediriger vers la page d'accueil
   };
 
   return (
@@ -26,22 +42,31 @@ const NavigationBar = ({ children }) => {
     >
       <Navbar.Brand>
         <link rel="icon" href="/favicon.ico" />
-        <Text onClick={() => router.push("#")} b color="inherit" hideIn="xs">
+        <Text onMouseDown={handleHomeClick} b color="inherit" hideIn="xs">
           PAYE TON KAWA
         </Text>
       </Navbar.Brand>
       <Navbar.Content hideIn="xs" variant="underline">
-        <Navbar.Link onMouseOver={(e) => console.log(e)} href="#">
+        <Navbar.Link color="inherit" href="/productlist">
+          Nos produits
+        </Navbar.Link>
+        <Navbar.Link onMouseOver={(e) => console.log(e)} href="/">
           Home
         </Navbar.Link>
-        <Navbar.Link href="#">Lien</Navbar.Link>
+        <Navbar.Link color="inherit" href="/users">
+          Clients
+        </Navbar.Link>
+        <Navbar.Link color="inherit" href="/Revendeurs">
+          Revendeurs
+        </Navbar.Link>
       </Navbar.Content>
+      
       <Navbar.Content>
-        <Navbar.Link color="inherit" href="login">
+        <Navbar.Link color="inherit" href="/login">
           Login
         </Navbar.Link>
         <Navbar.Item>
-          <Button auto flat as={Link} href="register">
+          <Button auto flat as={Link} href="/register">
             Register
           </Button>
         </Navbar.Item>
