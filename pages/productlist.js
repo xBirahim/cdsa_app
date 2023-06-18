@@ -84,8 +84,12 @@ const ProductList = () => {
         ))}
       </Grid.Container>
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+      
     </>
   );
 };
 
+export function getProducts() {
+  return products;
+}
 export default ProductList;

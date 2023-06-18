@@ -2,12 +2,14 @@ import Head from "next/head";
 import Link from "next/link";
 //import Image from "next/image";
 import { Image } from '@nextui-org/react';
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import { Button, Row, Spacer, Avatar, Grid, Text, Dropdown, Container, Card} from '@nextui-org/react';
-import Profile from "./productlist";
 import { User } from "@nextui-org/react";
+import Slider from 'react-slick';
+import {ProductList, products} from './productlist';
+import Profile from "./register";
 
 export default class NextJsCarousel extends Component {
   render() {
@@ -16,10 +18,10 @@ export default class NextJsCarousel extends Component {
     const text3 = "Voir toutes les promotions";
     const text4 = "Les derniers avis";
     const text5 = "+ de 1000 avis collectés";
-    const text6 = "Voir tous les avis";
+    const text6 = "Voir tous les avis...";
       return (
           <div> 
-          <Text h1 size={17}  weight="bold" css={{ as: 'center', mb: '10px', ml:'15px' }}>{text}</Text>
+            <Text h1 size={17}  weight="bold" css={{ as: 'center', mb: '10px', ml:'10%' }}>{text}</Text>
             <Carousel>
                 <div>
                     <img src="https://www.lemondedesartisans.fr/sites/lemondedesartisans.fr/files/illustrations/articles/cafe-torrefacteurs.jpg" alt="image1"/>
@@ -97,33 +99,35 @@ export default class NextJsCarousel extends Component {
             </Container><Spacer y={1}/>
             </div>
             <div>
-              <Container css={{ width: 'auto', ml:'-30px', mr:'-100px'}}>
-              <Card css={{width: "100%"}}>
-                <Text h1 size={30}  weight="bold" css={{ textGradient: "45deg, $yellow600 -20%, $red600 100%", mb: '10px', ml:'30%' }}>{text2}</Text>
-                <Text h3 size={15}  weight="bold" css={{ textGradient: "45deg, $yellow600 -20%, $red600 100%", mb: '10px', ml:'20%', mt:'-10px' }}>{text3}</Text>
-                <Profile />
-              </Card>
-            </Container>
             </div><Spacer y={1}/>
             <div>
               <Text h1 size={30}  weight="bold" css={{ textGradient: "45deg, $yellow600 -20%, $red600 100%", mb: '10px', ml:'13%' }}>{text4}</Text>
               <Text h1 size={15}  css={{ textGradient: "45deg, $yellow600 -20%, $red600 100%", mb: '10px', ml:'20%', mt:'-10px' }}>{text5}</Text>
             <Row>
               <div>
-               <Carousel>
-                <Card css={{ mw: '200px', p: '20px' }}>
-                <User src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="Ariana Wattson" pointer/>
-                <p>Lecafé bio est d'excellente qualité. Je vous le recommande</p></Card><Spacer x={1}/>
-                <Card css={{ mw: '200px', p: '20px' }}>
-                <User src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="Ariana Wattson" pointer/>
-                <p>Lecafé bio est d'excellente qualité. Je vous le recommande</p></Card><Spacer x={1}/>
-                <Card css={{ mw: '200px', p: '20px' }}>
-                <User src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="Ariana Wattson" pointer/>
-                <p>Lecafé bio est d'excellente qualité. Je vous le recommande</p></Card><Spacer x={1}/>
+               <Carousel> 
+                 
+                <div>  
+                <Row>        
+                    <Card css={{ mw: '100%', p: '20px' }}>
+                        <User src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="Ariana " pointer/>
+                        <p>Lecafé bio est d'excellente qualité. Je vous le recommande</p>
+                    </Card><Spacer x={1}/>
+                    <Card css={{ mw: '100%', p: '20px' }}>
+                        <User src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name=" Wattson" pointer/>
+                        <p>Lecafé bio est d'excellente qualité. Je vous le recommande</p>
+                    </Card><Spacer x={1}/>
+                    <Card css={{ mw: '100%', p: '20px' }}>
+                        <User src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="Ari" pointer/>
+                        <p>Lecafé bio est d'excellente qualité. Je vous le recommande</p>
+                    </Card>
+                  </Row>
+                </div>
+                   
                 </Carousel> 
               </div>
             </Row>
-            <Text h1 size={15}  css={{ textGradient: "45deg, $yellow600 -20%, $red600 100%", mb: '10px', ml:'20%', mt:'-10px' }}>{text6}</Text>
+            <Text h1 size={15}  css={{ textGradient: "45deg, $yellow600 -20%, $red600 100%", mb: '10px', ml:'35%', mt:'-25px' }}>{text6}</Text>
             </div>
           </div>
           
