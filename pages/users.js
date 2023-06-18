@@ -30,6 +30,7 @@ export default function Users() {
 
   const handleSearchFieldChange = (field) => {
     setSearchField(field);
+    setSearchValue(""); // Réinitialise la valeur de recherche lors du changement du champ de recherche
   };
 
   const filteredUsers = userList.filter((user) =>

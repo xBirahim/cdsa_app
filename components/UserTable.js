@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Table, Card, Checkbox, Button } from "@nextui-org/react";
 import { useRouter } from "next/router";
-import { Select } from "@nextui-org/react";
 
 const UserTable = ({ users }) => {
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -10,41 +9,50 @@ const UserTable = ({ users }) => {
   const columns = [
     {
       key: "checkbox",
-      title: "",
+      label: "",
     },
     {
       key: "id",
-      title: "Id",
+      label: "Id",
     },
     {
       key: "name",
-      title: "Name",
+      label: "Name",
     },
     {
       key: "surname",
-      title: "Surname",
+      label: "Surname",
     },
     {
       key: "status",
-      title: "Statut",
+      label: "Statut",
     },
     {
       key: "reference",
-      title: "Référence de la commande",
+      label: "Référence de la commande",
     },
     {
       key: "actions",
-      title: "Actions",
+      label: "Actions",
     },
   ];
 
   const handleCheckboxChange = (event, userId) => {
-    if (event.target.checked) {
+    if (event && event.target && event.target.checked) {
       setSelectedUsers((prevSelectedUsers) => [...prevSelectedUsers, userId]);
     } else {
       setSelectedUsers((prevSelectedUsers) =>
         prevSelectedUsers.filter((id) => id !== userId)
       );
+    }
+  };
+
+  const handleSelectAll = (event, users) => {
+    if (event && event.target && event.target.checked) {
+      const allUserIds = users.map((user) => user.id);
+      setSelectedUsers(allUserIds);
+    } else {
+      setSelectedUsers([]);
     }
   };
 
@@ -63,61 +71,91 @@ const UserTable = ({ users }) => {
   return (
     <div>
       <Card
-        hoverable
-        style={{
-          height: "200px",
-          width: "600px",
+        isPressable
+        isHoverable
+        css={{
+          height: "auto",
+          width: "auto",
           minHeight: "150px",
           minWidth: "400px",
         }}
       >
+        <Checkbox
+          checked={selectedUsers.length === users.length}
+          onChange={(e) => handleSelectAll(e, users)}
+        >
+          Sélectionner tout
+        </Checkbox>
+
         <Table
-          style={{
+          css={{
             height: "auto",
             minWidth: "100%",
+            marginTop: "16px",
           }}
-          data={users}
-          columns={columns}
-          keyField="id"
         >
-          {(item) => (
-            <>
-              <Table.Cell>
-                <Checkbox
-                  checked={selectedUsers.includes(item.id)}
-                  onChange={(e) => handleCheckboxChange(e, item.id)}
-                />
-              </Table.Cell>
-              <Table.Cell>{item.id}</Table.Cell>
-              <Table.Cell>{item.name}</Table.Cell>
-              <Table.Cell>{item.surname}</Table.Cell>
-              <Table.Cell>{item.status}</Table.Cell>
-              <Table.Cell>{item.reference}</Table.Cell>
-              <Table.Cell>
-                <Select
-                  auto
-                  size="mini"
-                  bordered
-                  placeholder="Sélectionner une action"
-                  onChange={(value) => {
-                    if (value === "Modifier") {
-                      handleEditUser();
-                    } else if (value === "Supprimer") {
-                      handleDeleteUser();
-                    }
-                  }}
-                >
-                  <Select.Option value="Modifier">Modifier</Select.Option>
-                  <Select.Option value="Supprimer">Supprimer</Select.Option>
-                </Select>
-              </Table.Cell>
-            </>
-          )}
+          <Table.Header columns={columns}>
+            {(column) => (
+              <Table.Column key={column.key}>{column.label}</Table.Column>
+            )}
+          </Table.Header>
+          <Table.Body items={users}>
+            {(item) => (
+              <Table.Row key={item.key}>
+                {(columnKey) =>
+                  columnKey === "checkbox" ? (
+                    <Table.Cell>
+                      <Checkbox
+                        checked={selectedUsers.includes(item.id)}
+                        onChange={(e) => handleCheckboxChange(e, item.id)}
+                      />
+                    </Table.Cell>
+                  ) : columnKey === "actions" ? (
+                    <Table.Cell key={columnKey}>
+                      <Button
+                        auto
+                        size="mini"
+                        bordered
+                        color="primary"
+                        onClick={handleEditUser}
+                      >
+                        Modifier
+                      </Button>
+                      <Button
+                        auto
+                        size="mini"
+                        bordered
+                        color="primary"
+                        onClick={handleDeleteUser}
+                      >
+                        Supprimer
+                      </Button>
+                    </Table.Cell>
+                  ) : (
+                    <Table.Cell
+                      css={{
+                        fontWeight: columnKey === "id" ? "bold" : "normal",
+                        color: columnKey === "status" ? "#ff0000" : "inherit",
+                      }}
+                    >
+                      {item[columnKey]}
+                    </Table.Cell>
+                  )
+                }
+              </Table.Row>
+            )}
+          </Table.Body>
         </Table>
-        <Button auto size="small" onClick={handleAddUser}>
-          Ajouter
-        </Button>
       </Card>
+      <Button
+        auto
+        size="small"
+        color="primary"
+        onClick={handleAddUser}
+        style={{ margin: "16px auto" }}
+      >
+        Ajouter
+      </Button>
     </div>
   );
 };

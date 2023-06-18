@@ -4,12 +4,14 @@ import { Badge, Grid, Spacer } from "@nextui-org/react";
 import Product from "components/product";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { data } from "components/test";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const router = useRouter();
-
+  //products = data;
+/*
   useEffect(() => {
     const getData = async () => {
       try {
@@ -43,7 +45,7 @@ const ProductList = () => {
   useEffect(() => {
     console.log("Panier mis à jour :", cartItems);
   }, [cartItems]);
-
+*/
   const handleAddToCart = (item, id) => {
     const existingItem = cartItems.find((cartItem) => cartItem.id === id);
     if (existingItem) {
@@ -68,7 +70,7 @@ const ProductList = () => {
   return (
     <>
       <Grid.Container gap={2} justify="flex-start">
-        {products.map((product) => (
+        {data.map((product) => (
           <Grid xs={6} sm={3} key={product.id}>
             <Product
               text={product.name}
