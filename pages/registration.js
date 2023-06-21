@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import Gradient from "components/Themes";
+import {Gradient} from "components/Themes";
 import { ChevronLeft } from "react-iconly";
 import axios from "axios";
 import axiosRetry from "axios-retry";
 import { Service } from "tools/service";
-import { QrReader } from "react-qr-reader";
+import { QrReader } from "react-qr-scanner";
 import { Router, useRouter } from "next/router";
-import Camera from "./camera";
+import cryptoJs from "crypto-js";
 import {
   Card,
   Grid,
@@ -20,6 +20,7 @@ import {
   Link,
   Modal,
   useInput,
+  Badge,
 } from "@nextui-org/react";
 
 export default function Registration() {
@@ -33,22 +34,14 @@ export default function Registration() {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [email, setEmail] = useState("");
-  const [scanResult, setScanResult] = useState("");
-  const [startScan, setStartScan] = useState(false);
-  const [showScanPopup, setShowScanPopup] = useState(false);
+  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
+  const [company, setCompany] = useState("");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [isDealer, setIsDealer] = useState(false);
 
-  const getCurrentDate = () => {
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const hour = date.getHours();
-    const min = date.getMinutes();
-    const sec = date.getSeconds();
-    return `${year}${month}${day}${hour}${min}${sec}`;
-  };
-
-  const senfConfirmationMail = async (urlLink, body) => {
+  const sendConfirmationMail = async (urlLink, body) => {
     Service.post(
       urlLink,
       { "Content-Type": "application/json; charset=utf-8" },
@@ -58,41 +51,106 @@ export default function Registration() {
     });
   };
 
-  const validateEmail = (value) => {
-    return value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
+  const createDealer = async (urlLink, body) => {
+    console.log(JSON.stringify(body));
+    Service.post(
+      urlLink,
+      JSON.stringify(body)
+    ).then((r) => {
+      Service.setCurrentUser(r.data);
+      router.push("/dealer")
+    });
+
   };
 
-  const hashAndSaltPassword = (password) => {
-    setPasswordConfirm(password);
-  };
 
-  // Camera
+  const createUser = async (urlLink, body) => {
+    Service.post(
+      urlLink,
+      { "Content-Type": "application/json; charset=utf-8" },
+      JSON.stringify(body)
+    ).then((r) => {
+      console.log(r.data);
+    });
 
-    const closeCameraHandler = () => {
-      setStartScan(false);
-      setShowScanPopup(false);
-      console.log("closed");
-      localStorage.setItem("userKey", "xxx");
-      router.push(`/home`);
-    };
-
-  const handleScan = (result) => {
-    if (result) {
-      setScanResult(result);
-      console.log(result);
-      closeCameraHandler();
+    if (isDealer) {
+      //Envoyer un mail de confirmation
     }
   };
 
-  const handleScanError = (error) => {
-    console.log(error);
+  const validateEmail = (value) => {
+    if (value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i)) {
+      console.log("Mail: OK");
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const validatePassword = (value) => {
+    // Vérifier si le texte a au moins 8 caractères
+    if (value.length < 8) {
+      return false;
+    }
+
+    // // Vérifier si le texte contient au moins une lettre majuscule
+    // if (!/[A-Z]/.test(value)) {
+    //   return false;
+    // }
+
+    // // Vérifier si le texte contient au moins une lettre minuscule
+    // if (!/[a-z]/.test(value)) {
+    //   return false;
+    // }
+
+    // // Vérifier si le texte contient au moins un chiffre
+    // if (!/\d/.test(value)) {
+    //   return false;
+    // }
+
+    // // Vérifier si le texte contient au moins un caractère spécial
+    // if (!/[!@#$%^&*]/.test(value)) {
+    //   return false;
+    // }
+
+    // Le texte satisfait toutes les conditions du mot de passe
+    console.log("Mot de passe: OK");
+    return true;
+  };
+
+  const validatePhoneNumber = (value) => {
+    if (value.length < 8 || value.length > 10) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const checkInfo = () => {
+    if (
+      validateEmail(email) &&
+      validatePassword(password) &&
+      validatePhoneNumber(phone)
+    ) {
+      if (!isDealer) {
+              return true
+            }
+      else if (company.length != 0) {
+                return true
+              }
+    }else{
+      return false
+    }
   };
 
   return (
     <>
       <Grid.Container css={{ minHeight: "100vh", bg: Gradient.neutral }}>
         <Container display="flex" alignItems="center" justify="center">
-          <Card css={{ mw: "420px", p: "20px" }} isHoverable>
+          <Card
+            css={{ mw: "420px", p: "20px", minHeight: "600px", maxHeight: "800px"}}
+            isHoverable
+          >
             <Card.Header>
               <Button
                 auto
@@ -120,13 +178,11 @@ export default function Registration() {
               weight="bold"
               css={{
                 as: "center",
-                mb: "20px",
               }}
             >
               Registration
             </Text>
             <Input
-              // {...bindings}
               clearable
               underlined
               fullWidth
@@ -141,7 +197,6 @@ export default function Registration() {
             />
             <Spacer y={1} />
             <Input
-              clearable
               underlined
               fullWidth
               color="primary"
@@ -156,7 +211,6 @@ export default function Registration() {
             />
             <Spacer y={1} />
             <Input
-              clearable
               underlined
               fullWidth
               color="error"
@@ -169,13 +223,77 @@ export default function Registration() {
                 setPasswordConfirm(e.target.value);
               }}
             />
-            <Spacer y={2} />
+            <Spacer y={1.5} />
+            <Grid>
+              <Input
+                underlined
+                fullWidth
+                size="lg"
+                labelPlaceholder="Username"
+                aria-label="Username"
+                css={{ mb: "6px" }}
+                type="text"
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                }}
+              />
+              <Spacer y={1.5} />
+              <Input
+                underlined
+                fullWidth
+                size="lg"
+                labelPlaceholder="Name"
+                aria-label="Name"
+                css={{ mb: "6px" }}
+                type="text"
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+              />
+              <Spacer y={1.5} />
+              <Input
+                underlined
+                fullWidth
+                size="lg"
+                labelLeft="+33"
+                aria-label="PhoneNumber"
+                css={{ mb: "6px" }}
+                type="number"
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                }}
+              />
+              <Spacer y={1.5} />
+              {isDealer && (
+                <Input
+                  underlined
+                  fullWidth
+                  size="lg"
+                  labelLeft="Company"
+                  aria-label="Company"
+                  css={{ mb: "6px" }}
+                  type="text"
+                  onChange={(e) => {
+                    setCompany(e.target.value);
+                  }}
+                />
+              )}
+            </Grid>
+
             <Row justify="space-between">
               <Checkbox>
                 <Text size={14}>Remember me</Text>
               </Checkbox>
-              <Text color="primary" size={14} as={Link} href="#">
-                Forgot password?
+              <Text
+                color="primary"
+                size={14}
+                as={Button}
+                light
+                onPress={(e) => {
+                  setIsDealer(!isDealer);
+                }}
+              >
+                {isDealer ? "I am a customer" : "I am a dealer"}
               </Text>
             </Row>
             <Spacer y={1} />
@@ -184,69 +302,45 @@ export default function Registration() {
               onPress={() => {
                 // getDate("https://localhost:7063/api/tool/date");
 
-                if (validateEmail(email)) {
-                  senfConfirmationMail(
-                    "https://localhost:7063/api/tool/print",
-                    JSON.stringify({
+                if (checkInfo()) {
+                  {
+                    const passwordData = Service.hashAndSaltPassword(password);
+                    const body = {
                       mail: email,
-                      key: getCurrentDate(),
-                      passwordHash: password,
-                    })
-                  );
-                  setShowScanPopup(true);
+                      passwordHash: passwordData.hashedPassword,
+                      salt: passwordData.salt,
+                      username: username,
+                      address: address,
+                      phone: phone,
+                      isDealer: isDealer,
+                      company: company,
+                    };
+                    // sendConfirmationMail(
+                    //   "https://localhost:7063/api/tool/print",
+                    //   JSON.stringify(body)
+                    // );
+
+                    isDealer
+                      ? createDealer(
+                          "https://localhost:7063/api/dealers",
+                          {	
+                            name: name,
+                            username: username,
+                            email: email,
+                            passwordHash: passwordData.hashedPassword,
+                            phone: phone,
+                            company: company,
+                          } 
+                        )
+                      : console.log("Customer");
+                  }
+                } else {
+                  console.log("Erreur dans les champs");
                 }
               }}
             >
               Sign in
             </Button>
-            <Modal
-              closeButton
-              aria-labelledby="modal-scan"
-              open={showScanPopup}
-              onClose={closeCameraHandler}
-              preventClose
-            >
-              <Modal.Header>
-                <Container
-                  display="flex"
-                  alignItems="center"
-                  justify="center"
-                  css={{ minHeight: "100vh" }}
-                >
-                  <Card
-                    height={100}
-                    width={100}
-                    css={{ maxHeight: 400, maxWidth: 400 }}
-                  >
-                    <Card.Header>
-                      <Text id="modal-scan" b size={24} css={{ as: "center" }}>
-                        Scan the QR Code
-                      </Text>
-                    </Card.Header>
-                    <Button
-                      css={{ minHeight: 30, maxWidth: 60, as: "center" }}
-                      onClick={() => {
-                        setStartScan(!startScan);
-                      }}
-                    >
-                      {startScan ? "Stop Scan" : "Start Scan"}
-                    </Button>
-
-                    <Card.Body css={{ minHeight: 200, minWidth: 200 }}>
-                      {startScan && (
-                        <QrReader
-                          delay={1000}
-                          onError={handleScanError}
-                          onScan={handleScan}
-                          onResult={handleScan}
-                          style={{ width: "100vh" }}
-                        />
-                      )}
-                    </Card.Body>
-                  </Card>
-                </Container>
-              </Modal.Header>
-            </Modal>
           </Card>
         </Container>
       </Grid.Container>

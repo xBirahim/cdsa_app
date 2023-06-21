@@ -1,5 +1,6 @@
 import axios from "axios";
 import axiosRetry from "axios-retry";
+import cryptoJs from "crypto-js";
 
 axiosRetry(axios, { retries: 5 });
 // Exponential back-off retry delay between requests
@@ -10,7 +11,7 @@ export class Service {
     return await axios.get(`${url}`);
   }
 
-  static async post(url, header = {}, body = "") {
+  static async post(url, body = "") {
     // let value = {
     //   data: {
     //     Text: `${body}`,
@@ -31,4 +32,41 @@ export class Service {
       data: body,
     });
   }
+
+  static async getItemData(id) {
+    return Service.get(`https://localhost:7063/api/Products/${id}`);
+  }
+
+  static async getItems() {
+    return Service.get(`https://localhost:7063/api/Products`);
+  }
+
+  static setCurrentUser(id) {
+    localStorage.setItem('userid', id);
+  }
+
+  static getCurrentUser(){
+    localStorage.getItem("userid")
+  }
+
+  static logout(){
+    localStorage.removeItem("userid")
+  }
+
+  static hashAndSaltPassword = (password) => {
+    // Générer un sel aléatoire
+    const salt = cryptoJs.lib.WordArray.random(16).toString();
+
+    // Combinaison du mot de passe avec le sel
+    const saltedPassword = password + salt;
+
+    // Hasher le mot de passe avec SHA256
+    const hashedPassword = cryptoJs.SHA256(password).toString();
+
+    return {
+      hashedPassword,
+      salt,
+    };
+  };
+
 }

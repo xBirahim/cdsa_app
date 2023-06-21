@@ -14,7 +14,9 @@ const Layout = ({ children }) => {
         <title>MSPR</title>
         <meta name="description" content="mspr" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
         <link rel="icon" href="/favicon.ico" />
+        
       </Head>
         {children} 
       <footer>

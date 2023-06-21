@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import Gradient from "components/Themes";
-import axios from "axios";
-import axiosRetry from "axios-retry";
-// import {QrScanner, QrReader} from "react-qr-scanner";
+import {Gradient} from "components/Themes";
 import QrReader from "react-qr-scanner"
 import { useRouter } from "next/router";
 import {
@@ -19,85 +16,67 @@ import {
   Modal,
   useInput,
 } from "@nextui-org/react";
-import { Authentication } from "tools/authentication";
 import { ChevronLeft, Swap } from "react-iconly";
+import Scanner from "components/Scanner";
+import { Service } from "tools/service";
+import axios from "axios";
 
 export default function Login() {
+
   const router = useRouter();
 
-  axiosRetry(axios, { retries: 5 });
-  // Exponential back-off retry delay between requests
-  axiosRetry(axios, { retryDelay: axiosRetry.exponentialDelay });
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [email, setEmail] = useState("");
+  const [authKey, setAuthKey] = useState("");
 
-  const [startScan, setStartScan] = useState(false);
-  const [scanResult, setScanResult] = useState("");
-  const [cameraSelected, setCameraSelected] = useState("user");
-
-  const closeCameraHandler = () => {
-    setStartScan(false);
-    console.log("closed");
-    console.log(Authentication.getUser(), "user");
-    router.push(`/home`);
+  const handleScanResult = (result) => {
+    // Faites quelque chose avec la valeur du scan
+    console.log("Résultat du scan :", result);
+    setAuthKey(result["text"]);
+    // Autres traitements...
   };
 
-  const switchCamera = () => {
-    switch (cameraSelected) {
-      case "environment":
-        setCameraSelected("user");
-        break;
-      case "user":
-        setCameraSelected("environment");
-        break;
-      default:
-        break;
+  const login = () => {
+    try {
+      let passwordData = Service.hashAndSaltPassword(password);
+      let url = "https://localhost:7063/api/Dealers/verify"
+      let body = {
+        email: email,
+        password: passwordData.hashedPassword,
+        authKey: authKey
+      };
+      console.log(JSON.stringify(body));
+      Service.post(url, body).then((res) => {
+        if (res.data != 0 ){
+      Service.setCurrentUser(res.data.id);
+      router.push("/dealer");
+        }else{
+          console.log("Bad credentials");
+        }
+      });
+    } catch (error) {
+      console.log(error);
     }
-  };
-
-  const closeCamx = async () => {
-    ref.current.stopCamera();
-  };
-
-  const closeCam = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: true,
-    });
-    // the rest of the cleanup code
-    window.location.reload();
-  };
-
-  const handleScan = (result) => {
-    if (result) {
-      setScanResult(result);
-      console.log(result);
-      closeCameraHandler();
-    }
-  };
-
-  const handleScanError = (error) => {
-    console.log(error);
-  };
-
-  const handleScannerLoad = (scanner) => {
-    if (scanner) {
-      scanner.start();
-    }
-  };
-
-  const handleScannerUnload = (scanner) => {
-    if (scanner) {
-      scanner.stop();
-    }
-  };
+  }
 
   return (
     <>
       <Grid.Container css={{ minHeight: "100vh", bg: Gradient.neutral }}>
-        <Container display="flex" alignItems="center" justify="center">
-          <Card css={{ mw: "420px", p: "20px" }} isHoverable>
+        <Container
+          display="flex"
+          alignItems="center"
+          justify="center"
+          css={{ minHeight: "100vh" }}
+        >
+          <Card
+css={{ mw: "420px", p: "20px", minHeight: "600px" }}
+          >
+            {" "}
             <Card.Header>
               <Button
-                color="error"
+                auto
+                color={Gradient.antineutral}
                 rounded
                 size={"xs"}
                 as={Link}
@@ -110,39 +89,52 @@ export default function Login() {
                     filled
                   />
                 }
-              ></Button>
-              <Text id="modal-scan" b size={24} css={{ as: "center" }}>
-                Scan your QR Code
-              </Text>
+              >
+                <Text b size={17}>
+                  Back
+                </Text>
+              </Button>
             </Card.Header>
+            <Input
+              clearable
+              underlined
+              fullWidth
+              color="success"
+              size="lg"
+              aria-label="Email"
+              placeholder="Email"
+              type="email"
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+            <Spacer y={1} />
+            <Input
+              underlined
+              fullWidth
+              color="primary"
+              size="lg"
+              aria-label="Password"
+              placeholder="Password"
+              css={{ mb: "6px" }}
+              type="password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+            <Scanner onScanResult={handleScanResult} />
+            <Spacer y={1} />
             <Button
-              css={{ minHeight: 30, maxWidth: 60, as: "center" }}
+              color="default"
               onPress={() => {
-                setStartScan(!startScan);
+            login();
               }}
             >
-              {startScan ? "Stop Scan" : "Start Scan"}
+              Sign in
             </Button>
-            <Card.Body css={{ minHeight: 200, minWidth: 200 }}>
-              {startScan && (
-                // facingMode: "user" ou "environment"
-                <QrReader
-                constraints={{
-                  audio: false,
-                  video: { facingMode: "user" }
-                }}
-                  onScan={handleScan}
-                  onError={handleScanError}
-                  onLoad={handleScannerLoad}
-                  onUnload={handleScannerUnload}
-                  style={{ width: "100%" }}
-                />
-              )}
-            </Card.Body>
-            <Checkbox>
-              <Text size={14}>Remember me</Text>
-            </Checkbox>
           </Card>
+          <Spacer y={1} />
+          
         </Container>
       </Grid.Container>
     </>

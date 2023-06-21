@@ -1,71 +1,57 @@
-import React, { useEffect, useState } from "react";
+// Index
+
+import { Grid, Col, Text, Pagination, Container, Row, Spacer } from "@nextui-org/react";
+import {GenerateRandomGradient, Gradient} from "components/Themes";
+import NavigationBar from "components/NavigationBar";
 import { useRouter } from "next/router";
-import Product from "components/product"
-import { Badge, Grid, Spacer } from "@nextui-org/react";
-
-export default function Profile() {
-
-  const list = [
-    {
-      title: "Orange",
-      price: "$5.50",
-    },
-    {
-      title: "Tangerine",
-      price: "$3.00",
-    },
-    {
-      title: "Cherry",
-      price: "$10.00",
-    },
-    {
-      title: "Lemon",
-      price: "$5.30",
-    },
-    {
-      title: "Avocado",
-      price: "$15.70",
-    },
-    {
-      title: "Lemon 2",
-      price: "$8.00",
-    },
-    {
-      title: "Banana",
-      price: "$7.50",
-    },
-    {
-      title: "Watermelon",
-      price: "$12.20",
-    },
-  ];
+import Product from "components/Product";
+import { useEffect, useState } from "react";
+import { Service } from "tools/service";
 
 
-  const router = useRouter();
+export default function ProductList() {
+    const [items, setItems] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const getData = async () => {
 
-    };
+    useEffect(() => {
+      const fetchItems = async () => {
+        try {
+          const response = await Service.get("https://localhost:7063/api/Products");
+          setItems(response.data);
+          console.log(items);
+          setIsLoading(false);
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
-    if (router.isReady) {
-      getData();
-    }
-
-  }, [router.isReady]);
+      fetchItems();
+    }, []);
 
   return (
     <>
-      <Grid.Container gap={2} justify="flex-start">
-        {list.map((item, index) => (
-          <Grid xs={6} sm={3} key={index}>
-            <Badge content="new" css={{bg: "red"}}>
-            <Product text={item.title} price={item.price}/>
-            </Badge>
-            <Spacer y={2}/>
-          </Grid>
-          
-        ))}
+      <NavigationBar />
+      <Grid.Container
+        justify="center"
+        css={{
+          height: "100%",
+
+        }}
+      >
+        {/* <Pagination
+          justify="center"
+          css={{ position: "fixed", bottom: "2%", zIndex: "9999" }}
+          noMargin
+          shadow
+          onlyDots
+          size={"xl"}
+          total={2}
+          onChange={moveTo}
+        /> */}
+        <Grid id="sub1" xs={20} sm={10}>
+          {!isLoading && <Product products={items} />}
+        </Grid>
       </Grid.Container>
     </>
   );
