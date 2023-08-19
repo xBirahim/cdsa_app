@@ -34,7 +34,7 @@ const Profil = () => {
             <Divider />
             {/* Autres sections d'informations du profil */}
             <Button auto color="brown" onClick={handleRetourClick}>
-              Accueil
+              Retour vers l&apos;accueil
             </Button>
           </Card.Body>
         </Card>
