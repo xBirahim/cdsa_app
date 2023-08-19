@@ -10,7 +10,6 @@ const Profil = () => {
     name: "John Doe",
     email: "john@example.com",
     avatar: "https://previews.123rf.com/images/asmati/asmati1603/asmati160301350/53564482-vecteur-ligne-utilisateur-ic%C3%B4ne-sur-fond-transparent.jpg",
-    // Autres données de profil
   };
 
   const handleRetourClick = () => {
