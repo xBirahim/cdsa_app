@@ -42,5 +42,4 @@ const Profil = () => {
     </div>
   );
 };
-
 export default Profil;

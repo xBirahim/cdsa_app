@@ -77,5 +77,4 @@ const Panier = () => {
     </div>
   );
 };
-
 export default Panier;
