@@ -37,7 +37,7 @@ const Panier = () => {
                 {cartItems.map((item, index) => (
                   <div key={index}>
                     <Text>{item.name}</Text>
-                    <Text>{`Prix: ${item.price} €`}</Text>
+                    <Text>{'Prix: ${item.price} €'}</Text>
                     <Button auto color="error" onClick={() => handleRemoveFromCart(item)}>
                       Supprimer
                     </Button>

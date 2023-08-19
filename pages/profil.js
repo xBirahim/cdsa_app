@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 const Profil = () => {
   const router = useRouter();
 
-  // Remplacez ces données factices par les données de votre utilisateur connecté
+  // Remplacez ces donnees factices par les donnees de votre utilisateur connecte
   const user = {
     name: "John Doe",
     email: "john@example.com",
@@ -34,9 +34,9 @@ const Profil = () => {
               </div>
             </div>
             <Divider />
-            {/* Autres sections d&apos;informations du profil */}
+            {/* Autres sections informations du profil */}
             <Button auto color="brown" onClick={handleRetourClick}>
-              Retour vers l&apos;accueil
+              Accueil
             </Button>
           </Card.Body>
         </Card>
