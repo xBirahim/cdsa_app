@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Card, Divider, Text } from "@nextui-org/react";
 import { useRouter } from "next/router";
-import { removeFromCart } from "../components/actions"; // Assurez-vous de corriger le chemin de votre fichier actions
+import { removeFromCart } from "../components/actions"; // Assurez-vous de corriger le chemin de votre fichier d'actions
 
 const Panier = () => {
   const router = useRouter();
@@ -27,7 +27,7 @@ const Panier = () => {
     <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
       <div style={{ width: "500px" }}>
         <Text b style={{ marginLeft: "8px" }}>
-          Mon panier
+      Mon panier
         </Text>
 
         <Card>
@@ -37,7 +37,7 @@ const Panier = () => {
                 {cartItems.map((item, index) => (
                   <div key={index}>
                     <Text>{item.name}</Text>
-                    <Text>{"Prix: ${item.price} €"}</Text>
+                    <Text>{`Prix: ${item.price} €`}</Text>
                     <Button auto color="error" onClick={() => handleRemoveFromCart(item)}>
                       Supprimer
                     </Button>
@@ -52,7 +52,7 @@ const Panier = () => {
               </>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", marginBottom: "20px" }}>
-                <Text style={{ fontSize: "14px", color: "#5d5d5d" }}>Panier Vide.</Text>
+                <Text style={{ fontSize: "14px", color: "#5d5d5d" }}>Il n'y a plus d'articles dans votre panier.</Text>
               </div>
             )}
 
@@ -77,4 +77,5 @@ const Panier = () => {
     </div>
   );
 };
+
 export default Panier;
