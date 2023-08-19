@@ -1,7 +1,6 @@
 import React from "react";
 import { Avatar, Button, Card, Divider, Text } from "@nextui-org/react";
 import { useRouter } from "next/router";
-
 const Profil = () => {
   const router = useRouter();
 
