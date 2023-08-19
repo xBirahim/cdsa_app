@@ -26,7 +26,10 @@ const Panier = () => {
   return (
     <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
       <div style={{ width: "500px" }}>
-        <Text style={{ fontSize: "22px", fontWeight: "bold", marginBottom: "20px" }}>Mon panier</Text>
+        <Text b style={{ marginLeft: "8px" }}>
+          Mon panier
+        </Text>
+
         <Card>
           <Card.Body>
             {cartItems.length > 0 ? (
