@@ -32,10 +32,10 @@ const Profil = () => {
               </div>
             </div>
             <Divider />
-            {/* Autres sections d'informations du profil */}
+            /*  
             <Button auto color="brown" onClick={handleRetourClick}>
               Accueil
-            </Button>
+            </Button>*/
           </Card.Body>
         </Card>
       </div>
