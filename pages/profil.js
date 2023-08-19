@@ -1,6 +1,7 @@
 import React from "react";
 import { Avatar, Button, Card, Divider, Text } from "@nextui-org/react";
 import { useRouter } from "next/router";
+
 const Profil = () => {
   const router = useRouter();
 
@@ -19,7 +20,9 @@ const Profil = () => {
   return (
     <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
       <div style={{ width: "500px" }}>
-        <Text style={{ fontSize: "22px", fontWeight: "bold", marginBottom: "20px" }}>Mon profil</Text>
+        <Text style={{ fontSize: "22px", fontWeight: "bold", marginBottom: "20px" }}>
+          Mon profil
+        </Text>
         <Card>
           <Card.Body>
             <div style={{ display: "flex", alignItems: "center" }}>
@@ -31,14 +34,15 @@ const Profil = () => {
               </div>
             </div>
             <Divider />
-            /*  
+            {/* Autres sections d&apos;informations du profil */}
             <Button auto color="brown" onClick={handleRetourClick}>
-              Accueil
-            </Button>*/
+              Retour vers l&apos;accueil
+            </Button>
           </Card.Body>
         </Card>
       </div>
     </div>
   );
 };
+
 export default Profil;
