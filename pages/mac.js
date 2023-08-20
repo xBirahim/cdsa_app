@@ -17,7 +17,7 @@ const ProductList = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://64db34f5593f57e435b0a0ac.mockapi.io/api/products/p1" // Remplacez par l'URL de votre API
+          "https://64db34f5593f57e435b0a0ac.mockapi.io/api/products/m1" // Remplacez par l'URL de votre API
         );
         const data = await response.json();
         setProducts(data);

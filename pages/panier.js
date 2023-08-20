@@ -64,10 +64,10 @@ const Panier = () => {
             )}
 
             <div style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
-              <Button auto color="brown" onClick={handleContinuerAchatsClick}>
+              <Button auto color="white" onClick={handleContinuerAchatsClick}>
                 Continuer mes achats
               </Button>
-              <Button auto color="brown" onClick={handleContinuezLivraisonClick}>
+              <Button auto color="white" onClick={handleContinuezLivraisonClick}>
                 Continuez vers la livraison
               </Button>
             </div>

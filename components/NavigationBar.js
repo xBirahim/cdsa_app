@@ -36,9 +36,9 @@ const NavigationBar = () => {
   console.log("Navbar dID: ", dealerData);
 
     const collapseItems = [
-        "Profile",
         "Home",
-        "Nos Produits",
+        "Nos Cafés",
+        "Machine à café",
         "Déconnexion",
       ];
 
@@ -53,7 +53,7 @@ const NavigationBar = () => {
         }}
       >
         <Text b color="inherit" hideIn="xs">
-          ACME
+          Paye ton Kawa
         </Text>
       </Navbar.Brand>
       <Navbar.Content
@@ -63,9 +63,8 @@ const NavigationBar = () => {
         variant="highlight-rounded"
       >
         <Navbar.Link href="/">Home</Navbar.Link>
-        <Navbar.Link isActive href="/productlist">
-          Nos Produits
-        </Navbar.Link>
+        <Navbar.Link href="/productlist">Nos Cafés</Navbar.Link>
+        <Navbar.Link href="/mac">Machine à café</Navbar.Link>
       </Navbar.Content>
       <Navbar.Content
         css={{
@@ -140,7 +139,7 @@ const NavigationBar = () => {
               css={{
                 minWidth: "100%",
               }}
-              href="#"
+              href={index === 0 ? "/" : index === 1 ? "/productlist" : "/mac"}
             >
               {item}
             </Link>
