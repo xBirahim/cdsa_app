@@ -35,14 +35,7 @@ const ProductList = () => {
   const handleAddToCart = (item) => {
     dispatch(addToCart(item));
     toast.success(`Article "${item.name}" ajouté au panier !`);
-
-    console.log("Produit ajouté au panier :");
-    console.log("Nom du produit :", item.name);
-    console.log("Quantité du produit :", 1);
   };
-
-  console.log("cartTotal:", cartTotal);
-
   return (
     <>
       <Grid.Container gap={2} justify="flex-start">
