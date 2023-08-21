@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "components/actions"; // Assurez-vous de corriger le chemin de votre fichier d'actions
 import Link from "next/link"; // Importez le composant Link depuis Next.js
 
-const ProductList = () => {
+const mac = () => {
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cartItems);
@@ -62,4 +62,4 @@ const ProductList = () => {
   );
 };
 
-export default ProductList;
+export default mac;
