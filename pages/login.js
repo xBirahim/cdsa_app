@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import {Gradient} from "components/Themes";
-import QrReader from "react-qr-scanner"
 import { useRouter } from "next/router";
 import {
   Card,
