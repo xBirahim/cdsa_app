@@ -40,32 +40,7 @@ export default function App({ closeModal }) {
           fullWidth
           color="primary"
           size="lg"
-          placeholder="Nom"
-        />
-        <Input
-          clearable
-          bordered
-          fullWidth
-          color="primary"
-          size="lg"
-          placeholder="Prénom"
-        />
-        <Input
-          clearable
-          bordered
-          fullWidth
-          color="primary"
-          size="lg"
           placeholder="Login"
-        />
-        <Input
-          clearable
-          bordered
-          fullWidth
-          color="primary"
-          size="lg"
-          placeholder="Email"
-          contentLeft={<Mail fill="currentColor" />}
         />
         <Input
           clearable
@@ -76,32 +51,6 @@ export default function App({ closeModal }) {
           placeholder="Password"
           contentLeft={<Password fill="currentColor" />}
         />
-                {isRevendeur && (
-          <Input
-            clearable
-            bordered
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="Société"
-          />
-        )}
-        <Row justify="space-between">
-          <Checkbox>
-            <Text size={14}>Remember me</Text>
-          </Checkbox>
-          <Text size={14}>Forgot password?</Text>
-        </Row>
-
-        <Radio.Group // Enveloppez les composants Radio dans un Radio.Group
-          value={isRevendeur ? "revendeur" : "nonRevendeur"}
-          onChange={(value) => setIsRevendeur(value === "revendeur")}
-          label="Qui etes vous?"
-          orientation="horizontal"
-        >
-          <Radio value="revendeur">Revendeur</Radio>
-          <Radio value="client">Client</Radio>
-        </Radio.Group>
       </Modal.Body>
       <Modal.Footer>
         <Button auto flat color="error" onPress={closeModal}>

@@ -38,9 +38,6 @@ const ProductList = () => {
   };
   return(
     <>
-          <Link href="/panier"> {/* Remplacez "/panier" par le chemin de votre page Panier.js */}
-          <button>Accéder au panier</button>
-      </Link>
       <Grid.Container gap={2} justify="flex-start">
         {products.map((product) => (
           <Grid xs={6} sm={3} key={product.id}>

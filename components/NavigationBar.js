@@ -2,12 +2,23 @@ import React, { useState, useEffect } from "react";
 import { Dropdown, Avatar, Navbar, Link, Text, Button } from "@nextui-org/react";
 import { User } from "react-iconly";
 import App from "../pages/App"; // Mettez à jour avec le bon chemin
+import Panier from "../pages/panier"; // Update the path to the correct location of the Panier component
+import Connexion from "../pages/connexion"; // Rename the imported component
+
 
 const NavigationBar = () => {
   const [appVisible, setAppVisible] = useState(false);
+  const [panierVisible, setPanierVisible] = useState(false);
+  const [connexionVisible, setConnexionVisible] = useState(false);
 
   const closeAppModal = () => {
     setAppVisible(false);
+  };
+  const closePanierModal = () => {
+    setPanierVisible(false);
+  };
+  const closeConnexionModal = () => {
+    setConnexionVisible(false);
   };
 
   const collapseItems = ["Home", "Nos Cafés", "Machine à café", "Déconnexion"];
@@ -20,9 +31,28 @@ const NavigationBar = () => {
     }
   }, [appVisible]);
 
+  useEffect(() => {
+    if (connexionVisible) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [connexionVisible]);
+
+  useEffect(() => {
+    if (panierVisible) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [panierVisible]);
+
   return (
     <div>
       {appVisible && <App closeModal={() => setAppVisible(false)} />}
+      {panierVisible && <Panier closeModal={() => setPanierVisible(false)} />}
+      {connexionVisible && <Connexion closeModal={() => setConnexionVisible(false)} />}
+
       <Navbar isBordered variant="static">
         <Navbar.Toggle showIn="xs" />
         <Navbar.Brand
@@ -71,10 +101,15 @@ const NavigationBar = () => {
                 </Button>
               </Dropdown.Item>
               <Dropdown.Item key="Connexion" css={{ height: "$18" }}>
-                <Button color="Black" onClick={() => setAppVisible(true)}>
+                <Button color="Black" onClick={() => setConnexionVisible(true)}>
                   Connexion
                 </Button>
-              </Dropdown.Item>              
+              </Dropdown.Item>       
+              <Dropdown.Item key="Panier" css={{ height: "$18" }}>
+                <Button color="Black" onClick={() => setPanierVisible(true)}>
+                  Panier
+                </Button>
+              </Dropdown.Item>          
             </Dropdown.Menu>
             
           </Dropdown>
