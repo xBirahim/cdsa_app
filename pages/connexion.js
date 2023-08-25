@@ -23,10 +23,7 @@ export default function App({ closeModal }) {
     >
       <Modal.Header>
         <Text id="modal-title" size={18}>
-          Bienvenue chez&nbsp;
-          <Text b size={18}>
-            PayeTonKAWA
-          </Text>
+          Connexion
           <br></br>
           <Text size={16}>
             Le café c'est la vie
