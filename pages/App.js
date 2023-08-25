@@ -65,7 +65,6 @@ export default function App({ closeModal }) {
           color="primary"
           size="lg"
           placeholder="Email"
-          contentLeft={<Mail fill="currentColor" />}
         />
         <Input
           clearable
@@ -74,7 +73,6 @@ export default function App({ closeModal }) {
           color="primary"
           size="lg"
           placeholder="Password"
-          contentLeft={<Password fill="currentColor" />}
         />
                 {isRevendeur && (
           <Input
