@@ -4,10 +4,10 @@ import Product from "components/product";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "components/actions"; // Assurez-vous de corriger le chemin de votre fichier d'actions
-import Link from "next/link"; // Importez le composant Link depuis Next.js
+import { addToCart } from "components/actions"; // Make sure to correct the path to your actions file
+import Link from "next/link";
 
-const mac = () => {
+const Mac = () => {
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cartItems);
@@ -17,15 +17,12 @@ const mac = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://64db34f5593f57e435b0a0ac.mockapi.io/api/products/m1" // Remplacez par l'URL de votre API
+          "https://64db34f5593f57e435b0a0ac.mockapi.io/api/products/m1" // Replace with your API URL
         );
         const data = await response.json();
         setProducts(data);
       } catch (error) {
-        console.log(
-          "Une erreur s'est produite lors de la récupération des données de l'API:",
-          error
-        );
+        console.log("An error occurred while fetching API data:", error);
       }
     };
 
@@ -34,13 +31,11 @@ const mac = () => {
 
   const handleAddToCart = (item) => {
     dispatch(addToCart(item));
-    toast.success(`Article "${item.name}" ajouté au panier !`);
+    toast.success(`Item "${item.name}" added to the cart!`);
   };
+
   return (
     <>
-          <Link href="/panier"> {/* Remplacez "/panier" par le chemin de votre page Panier.js */}
-          <button>Accéder au panier</button>
-      </Link>
       <Grid.Container gap={2} justify="flex-start">
         {products.map((product) => (
           <Grid xs={6} sm={3} key={product.id}>
@@ -60,4 +55,4 @@ const mac = () => {
   );
 };
 
-export default mac;
+export default Mac;
