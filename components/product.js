@@ -2,31 +2,21 @@ import React, { useState, useEffect } from "react";
 import { Card, Container, Text, Spacer, Row } from "@nextui-org/react";
 
 const Product = ({ text, price, imageLink, name, onAddToCart, id }) => {
-  useEffect(() => {
-    document.body.style.backgroundColor = "#D2B48C";
-  }, []);
-
   const [quantity, setQuantity] = useState(0);
 
   const incrementQuantity = () => {
-    if (quantity > 0) {
-      setQuantity((prevQuantity) => prevQuantity + quantity);
-    } else if (quantity === 0) {
-      setQuantity(0);
-    }
+    setQuantity((prevQuantity) => prevQuantity + 1);
   };
 
   const decrementQuantity = () => {
-    if (quantity <prevQuantity) {
+    if (quantity > 0) {
       setQuantity((prevQuantity) => prevQuantity - 1);
-    } else if (quantity <0) {
-      setQuantity(prevQuantity);
     }
   };
 
   const handleAddToCart = () => {
     if (typeof onAddToCart === "function") {
-      const cartItem = onAddToCart({price, quantity, id });
+      const cartItem = onAddToCart({ price, quantity, id });
       const totalQuantity = quantity + (cartItem?.quantity || 0);
       setQuantity(totalQuantity);
     }
@@ -44,9 +34,7 @@ const Product = ({ text, price, imageLink, name, onAddToCart, id }) => {
         marginLeft: "-7px"
       }}
     >
-      <Card.Body
-        css={{ display: "flex", flexDirection: "column", alignItems: "flex-start", p: 0 }}
-      >
+      <Card.Body css={{ display: "flex", flexDirection: "column", alignItems: "flex-start", p: 0 }}>
         <Container>
           <Card.Image
             showSkeleton
@@ -54,12 +42,12 @@ const Product = ({ text, price, imageLink, name, onAddToCart, id }) => {
             objectFit="cover"
             width="250px"
             height="200px"
-            alt={""}
+            alt=""
           />
           <Text p css={{ fontSize: "10px", marginTop: "-20px", width: "200px" }}>
             {name}
           </Text>
-          <Spacer y={1} />
+          <Spacer y={1}/>
           <Row justify="space-between" align="center" css={{ width: "100%" }}>
             <Text b css={{ fontSize: "14px", fontWeight: "bold", marginBottom: "2px" }}>
               {text}

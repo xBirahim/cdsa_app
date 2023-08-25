@@ -1,5 +1,3 @@
-import Head from "next/head";
-import Link from "next/link";
 //import Image from "next/image";
 import { Image } from '@nextui-org/react';
 import React, { Component, useEffect, useState } from 'react';
@@ -7,8 +5,6 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
 import { Button, Row, Spacer, Avatar, Grid, Text, Dropdown, Container, Card} from '@nextui-org/react';
 import { User } from "@nextui-org/react";
-import Slider from 'react-slick';
-import {ProductList, products} from './productlist';
 //import Profile from "./register";
 
 export default class NextJsCarousel extends Component {

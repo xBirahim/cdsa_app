@@ -36,12 +36,10 @@ const ProductList = () => {
     dispatch(addToCart(item));
     toast.success(`Article "${item.name}" ajouté au panier !`);
   };
-  return (
+  return(
     <>
           <Link href="/panier"> {/* Remplacez "/panier" par le chemin de votre page Panier.js */}
-        <a>
           <button>Accéder au panier</button>
-        </a>
       </Link>
       <Grid.Container gap={2} justify="flex-start">
         {products.map((product) => (
