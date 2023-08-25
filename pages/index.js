@@ -1,5 +1,4 @@
 //import Image from "next/image";
-import { Image } from '@nextui-org/react';
 import React, { Component, useEffect, useState } from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from 'react-responsive-carousel';
