@@ -44,7 +44,6 @@ export default function App({ closeModal }) {
           color="primary"
           size="lg"
           placeholder="Password"
-          contentLeft={<Password fill="currentColor" />}
         />
       </Modal.Body>
       <Modal.Footer>

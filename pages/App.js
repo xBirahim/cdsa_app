@@ -1,5 +1,3 @@
-import { Mail } from "./mail";
-import { Password } from "./Password";
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Text, Input, Row, Checkbox, Radio } from "@nextui-org/react";
 
