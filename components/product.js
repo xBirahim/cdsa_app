@@ -40,8 +40,8 @@ const Product = ({ text, price, imageLink, name, onAddToCart, id }) => {
             showSkeleton
             src={imageLink || "https://www.lardechoise.net/wp-content/uploads/IMG_7253-scaled.jpg"}
             objectFit="cover"
-            width="250px"
-            height="200px"
+            width="200px"
+            height="150px"
             alt=""
           />
           <Text p css={{ fontSize: "10px", marginTop: "-20px", width: "200px" }}>
