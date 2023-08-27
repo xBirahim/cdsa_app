@@ -1,13 +1,46 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Text, Input, Row, Checkbox, Radio } from "@nextui-org/react";
+import axios from "axios"; // Importez axios pour effectuer des requêtes API
+import { useRouter } from "next/router"; // Importez useRouter pour gérer les redirections
 
 export default function App({ closeModal }) {
   const [visible, setVisible] = useState(false);
   const [isRevendeur, setIsRevendeur] = useState(false); // État du bouton radio
+  const [login, setLogin] = useState(""); // État du champ de connexion
+  const [password, setPassword] = useState(""); // État du champ de mot de passe
+  const [loginError, setLoginError] = useState(false); // État pour gérer les erreurs de connexion
+  const router = useRouter(); // Utilisez le hook useRouter pour les redirections
 
   useEffect(() => {
     setVisible(true);
   }, []);
+
+  const handleLogin = async () => {
+    try {
+      console.log("Trying to login with:");
+      console.log("Login:", login);
+      console.log("Password:", password);
+  
+      const response = await axios.get(
+        `https://64e3bc10bac46e480e7923a0.mockapi.io/revendeur?login=${login}&password=${password}`
+      );
+        
+      // Si les données sont correctes, effectuez la redirection ici
+      if (response.data.isAuthenticated) {
+        // Redirection vers la page appropriée en fonction du rôle
+        if (isRevendeur) {
+          router.push("/mac");
+        } else {
+          router.push("/productlist");
+        }
+      } else {
+        // Affichage d'une erreur de connexion
+        setLoginError(true);
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'authentification :", error.response);
+    } 
+  };
 
   return (
     <Modal
@@ -22,10 +55,8 @@ export default function App({ closeModal }) {
       <Modal.Header>
         <Text id="modal-title" size={18}>
           Connexion
-          <br></br>
-          <Text size={16}>
-            Le café c'est la vie
-          </Text>
+          <br />
+          <Text size={16}>Le café c'est la vie</Text>
         </Text>
       </Modal.Header>
       <Modal.Body>
@@ -36,6 +67,8 @@ export default function App({ closeModal }) {
           color="primary"
           size="lg"
           placeholder="Login"
+          value={login}
+          onChange={(e) => setLogin(e.target.value)}
         />
         <Input
           clearable
@@ -44,14 +77,18 @@ export default function App({ closeModal }) {
           color="primary"
           size="lg"
           placeholder="Password"
+          value={password}
+          type="password"
+          onChange={(e) => setPassword(e.target.value)}
         />
+        {loginError && <Text color="error">Login ou mot de passe incorrect.</Text>}
       </Modal.Body>
       <Modal.Footer>
         <Button auto flat color="error" onPress={closeModal}>
-          Close
+          Fermer
         </Button>
-        <Button auto onPress={closeModal} color="Green">
-          Sign in
+        <Button auto onPress={handleLogin} color="Green">
+          Se connecter
         </Button>
       </Modal.Footer>
     </Modal>
