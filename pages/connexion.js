@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, Button, Text, Input, Row, Checkbox, Radio } from "@nextui-org/react";
 import axios from "axios"; // Importez axios pour effectuer des requêtes API
 import { useRouter } from "next/router"; // Importez useRouter pour gérer les redirections
+import useAuthStore from "../utils/store";
 
 export default function App({ closeModal }) {
   const [visible, setVisible] = useState(false);
@@ -10,6 +11,7 @@ export default function App({ closeModal }) {
   const [password, setPassword] = useState(""); // État du champ de mot de passe
   const [loginError, setLoginError] = useState(false); // État pour gérer les erreurs de connexion
   const router = useRouter(); // Utilisez le hook useRouter pour les redirections
+  const { userProfile, addUser, removeUser } = useAuthStore();
 
   useEffect(() => {
     setVisible(true);
@@ -22,15 +24,26 @@ export default function App({ closeModal }) {
       console.log("Password:", password);
   
       const response = await axios.get(
-        `https://64e3bc10bac46e480e7923a0.mockapi.io/revendeur?login=${login}&password=${password}`
+        `https://64e3bc10bac46e480e7923a0.mockapi.io/revendeur?email=${login}&password=${password}`
       );
-        
+
+      const users = response.data;
+
+      console.log(users);
+
+      const foundUser = users.find(user => user.email === login && user.password === password);
+      
+      console.log(response);
       // Si les données sont correctes, effectuez la redirection ici
-      if (response.data.isAuthenticated) {
+      if (foundUser) {
+
+        addUser(foundUser)
+
+        setVisible(false)
         // Redirection vers la page appropriée en fonction du rôle
-        if (isRevendeur) {
+        if (foundUser.role == "") {
           router.push("/mac");
-        } else {
+        } else if (foundUser.role == "client"){
           router.push("/productlist");
         }
       } else {
@@ -38,7 +51,7 @@ export default function App({ closeModal }) {
         setLoginError(true);
       }
     } catch (error) {
-      console.error("Erreur lors de l'authentification :", error.response);
+      console.error("Erreur lors de l'authentification :", error);
     } 
   };
 

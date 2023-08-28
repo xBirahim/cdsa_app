@@ -1,6 +1,7 @@
 import axios from "axios";
 import axiosRetry from "axios-retry";
 import cryptoJs from "crypto-js";
+import  QRCode  from "qrcode";
 
 axiosRetry(axios, { retries: 5 });
 // Exponential back-off retry delay between requests
@@ -68,5 +69,13 @@ export class Service {
       salt,
     };
   };
+
+  static async generateQrCode(value){
+    QRCode.toDataURL(value, {type: "png"})
+    .then(img => {
+      return img
+   })
+  }
+
 
 }

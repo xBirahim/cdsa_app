@@ -5,11 +5,15 @@ import axios from "axios"; // Importez axios pour effectuer des requêtes API
 import App from "../pages/App"; // Mettez à jour avec le bon chemin
 import Panier from "../pages/panier"; // Mettez à jour le chemin vers le composant Panier
 import Connexion from "../pages/connexion"; // Renommez le composant importé
+import useAuthStore from "../utils/store";
+import { useRouter } from "next/router";
 
 const NavigationBar = () => {
   const [appVisible, setAppVisible] = useState(false);
   const [panierVisible, setPanierVisible] = useState(false);
   const [connexionVisible, setConnexionVisible] = useState(false);
+  const { userProfile, addUser, removeUser } = useAuthStore();
+  const router = useRouter();
 
   const closeAppModal = () => {
     setAppVisible(false);
@@ -51,11 +55,18 @@ const NavigationBar = () => {
     }
   };
 
+  const handleLogout = () => {
+    removeUser();
+    router.push("")
+  }
+
   return (
     <div>
       {appVisible && <App closeModal={() => setAppVisible(false)} />}
       {panierVisible && <Panier closeModal={() => setPanierVisible(false)} />}
-      {connexionVisible && <Connexion closeModal={() => setConnexionVisible(false)} />}
+      {connexionVisible && (
+        <Connexion closeModal={() => setConnexionVisible(false)} />
+      )}
 
       <Navbar isBordered variant="static">
         <Navbar.Toggle showIn="xs" />
@@ -88,35 +99,89 @@ const NavigationBar = () => {
             },
           }}
         >
-          <Dropdown placement="bottom-right">
-            <Navbar.Item>
-              <Dropdown.Trigger>
-                <Avatar bordered as="button" size="md" icon={<User set="bold" />} />
-              </Dropdown.Trigger>
-            </Navbar.Item>
-            <Dropdown.Menu
-              aria-label="User menu actions"
-              color="secondary"
-              onAction={(actionKey) => console.log({ actionKey })}
-            >
-              <Dropdown.Item key="App" css={{ height: "$18" }}>
-                <Button color="Black" onClick={() => setAppVisible(true)}>
-                  Inscription
-                </Button>
-              </Dropdown.Item>
-              <Dropdown.Item key="Connexion" css={{ height: "$18" }}>
-                <Button color="Black" onClick={() => setConnexionVisible(true)}>
-                  Connexion
-                </Button>
-              </Dropdown.Item>       
-              <Dropdown.Item key="Panier" css={{ height: "$18" }}>
-                <Button color="Black" onClick={() => setPanierVisible(true)}>
-                  Panier
-                </Button>
-              </Dropdown.Item>          
-            </Dropdown.Menu>
-            
-          </Dropdown>
+          {userProfile ? (
+            <Dropdown placement="bottom-right">
+              <Navbar.Item>
+                <Dropdown.Trigger>
+                  <Avatar
+                    bordered
+                    as="button"
+                    color="secondary"
+                    size="md"
+                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                  />
+                </Dropdown.Trigger>
+              </Navbar.Item>
+              <Dropdown.Menu
+                aria-label="User menu actions"
+                color="secondary"
+                onAction={(actionKey) => console.log({ actionKey })}
+              >
+                <Dropdown.Item key="profile" css={{ height: "$18" }}>
+                  <Text b color="inherit" css={{ d: "flex" }}>
+                    Signed in as
+                  </Text>
+                  <Text b color="inherit" css={{ d: "flex" }}>
+                    {userProfile["email"]}
+                  </Text>
+                </Dropdown.Item>
+                <Dropdown.Item key="settings" withDivider>
+                  My Settings
+                </Dropdown.Item>
+                <Dropdown.Item key="team_settings">Team Settings</Dropdown.Item>
+                <Dropdown.Item key="analytics" withDivider>
+                  Analytics
+                </Dropdown.Item>
+                <Dropdown.Item key="system">System</Dropdown.Item>
+                <Dropdown.Item key="configurations">
+                  Configurations
+                </Dropdown.Item>
+                <Dropdown.Item key="help_and_feedback" withDivider>
+                  Help & Feedback
+                </Dropdown.Item>
+                <Dropdown.Item key="logout" withDivider color="error">
+                  <Button onPress={handleLogout} color={"error"}>Log Out</Button>
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          ) : (
+            <Dropdown placement="bottom-right">
+              <Navbar.Item>
+                <Dropdown.Trigger>
+                  <Avatar
+                    bordered
+                    as="button"
+                    size="md"
+                    icon={<User set="bold" />}
+                  />
+                </Dropdown.Trigger>
+              </Navbar.Item>
+              <Dropdown.Menu
+                aria-label="User menu actions"
+                color="secondary"
+                onAction={(actionKey) => console.log({ actionKey })}
+              >
+                <Dropdown.Item key="App" css={{ height: "$18" }}>
+                  <Button color="Black" onPress={() => setAppVisible(true)}>
+                    Inscription
+                  </Button>
+                </Dropdown.Item>
+                <Dropdown.Item key="Connexion" css={{ height: "$18" }}>
+                  <Button
+                    color="Black"
+                    onClick={() => setConnexionVisible(true)}
+                  >
+                    Connexion
+                  </Button>
+                </Dropdown.Item>
+                <Dropdown.Item key="Panier" css={{ height: "$18" }}>
+                  <Button color="Black" onPress={() => setPanierVisible(true)}>
+                    Panier
+                  </Button>
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          )}
         </Navbar.Content>
         <Navbar.Collapse>
           {collapseItems.map((item, index) => (
