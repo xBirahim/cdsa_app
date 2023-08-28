@@ -1,8 +1,7 @@
 import NavigationBar from "./NavigationBar";
 import Footer from "./Footer";
-import { Container, NextUIProvider, Spacer } from "@nextui-org/react";
+import { NextUIProvider } from "@nextui-org/react";
 import Head from "next/head";
-import SizeChecker from "./SizeChecker";
 
 
 
