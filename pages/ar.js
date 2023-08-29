@@ -1,15 +1,12 @@
-// pages/ar.js
-
 import React from 'react';
 import ARScene from '../components/ARScene';
 
-const ARPage = () => {
+const AR = () => {
   return (
-    <div>
-      <h1>Réalité Augmentée</h1>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       <ARScene />
     </div>
   );
 };
 
-export default ARPage;
+export default AR;
