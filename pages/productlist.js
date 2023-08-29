@@ -1,31 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Spacer } from "@nextui-org/react";
 import Product from "components/product";
+import ARScene from "components/ARScene"; // Importez le composant ARScene
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "components/actions"; // Assurez-vous de corriger le chemin de votre fichier d'actions
-import Link from "next/link"; // Importez le composant Link depuis Next.js
+import { addToCart } from "components/actions";
+import Link from "next/link";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cartItems);
   const cartTotal = useSelector((state) => state.cart.cartTotal);
+  const [isARActive, setIsARActive] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://64db34f5593f57e435b0a0ac.mockapi.io/api/products/p1" // Remplacez par l'URL de votre API
+          "https://64db34f5593f57e435b0a0ac.mockapi.io/api/products/p1"
         );
         const data = await response.json();
         setProducts(data);
       } catch (error) {
-        console.log(
-          "Une erreur s'est produite lors de la récupération des données de l'API:",
-          error
-        );
+        console.log("Error fetching data from API:", error);
       }
     };
 
@@ -34,10 +33,15 @@ const ProductList = () => {
 
   const handleAddToCart = (item) => {
     dispatch(addToCart(item));
-    toast.success(`Article "${item.name}" ajouté au panier !`);
+    toast.success(`Item "${item.name}" added to cart!`);
   };
-  return(
-    <>
+
+  const activateAR = () => {
+    setIsARActive(true);
+  };
+
+  return (
+    <div>
       <Grid.Container gap={2} justify="flex-start">
         {products.map((product) => (
           <Grid xs={6} sm={3} key={product.id}>
@@ -47,13 +51,16 @@ const ProductList = () => {
               description={product.description}
               imageLink={product.image}
               onAddToCart={() => handleAddToCart(product)}
+              isARActive={isARActive}
+              activateAR={activateAR}
             />
+            {isARActive && <ARScene />} {/* Afficher ARScene si la réalité augmentée est active */}
             <Spacer y={2} />
           </Grid>
         ))}
       </Grid.Container>
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
-    </>
+    </div>
   );
 };
 

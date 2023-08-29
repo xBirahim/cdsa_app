@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, Container, Text, Spacer, Row } from "@nextui-org/react";
+import Link from "next/link"; // Importez le composant Link depuis Next.js
 
-const Product = ({ text, price, imageLink, name, onAddToCart, id }) => {
+const Product = ({ text, price, imageLink, name, onAddToCart, id, isARActive, activateAR }) => {
   const [quantity, setQuantity] = useState(0);
 
   const incrementQuantity = () => {
@@ -23,100 +24,39 @@ const Product = ({ text, price, imageLink, name, onAddToCart, id }) => {
   };
 
   return (
-    <Card
-      isPressable
-      isHoverable
-      css={{
-        height: "250px",
-        width: "250px",
-        minHeight: "50px",
-        minWidth: "180px",
-        marginLeft: "-7px"
-      }}
-    >
-      <Card.Body css={{ display: "flex", flexDirection: "column", alignItems: "flex-start", p: 0 }}>
+    <Card>
+      <Card.Body>
         <Container>
           <Card.Image
             showSkeleton
-            src={imageLink || "https://www.lardechoise.net/wp-content/uploads/IMG_7253-scaled.jpg"}
+            src={imageLink || "https://www.example.com/default-image.jpg"}
             objectFit="cover"
             width="200px"
             height="150px"
             alt=""
           />
-          <Text p css={{ fontSize: "10px", marginTop: "-20px", width: "200px" }}>
-            {name}
-          </Text>
+          <Text p>{name}</Text>
           <Spacer y={1}/>
-          <Row justify="space-between" align="center" css={{ width: "100%" }}>
-            <Text b css={{ fontSize: "14px", fontWeight: "bold", marginBottom: "2px" }}>
-              {text}
-            </Text>
-            <Text
-              css={{
-                fontSize: "15px",
-                marginBottom: "2px",
-                color: "#006EFF",
-                fontWeight: "bold"
-              }}
-            >{`${price} €`}</Text>
+          <Row justify="space-between" align="center">
+            <Text b>{text}</Text>
+            <Text color="#006EFF" b>{`${price} €`}</Text>
           </Row>
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <button
-              onClick={decrementQuantity}
-              style={{
-                backgroundColor: "#ADD8E6",
-                color: "#FFFFFF",
-                padding: "3px 8px",
-                border: "none",
-                borderRadius: "5px"
-              }}
-            >
-              -
-            </button>
+            <button onClick={decrementQuantity}>-</button>
             <span style={{ margin: "0 5px" }}>{quantity}</span>
-            <button
-              onClick={incrementQuantity}
-              style={{
-                backgroundColor: "#ADD8E6",
-                color: "#FFFFFF",
-                padding: "3px 8px",
-                border: "none",
-                borderRadius: "5px"
-              }}
-            >
-              +
-            </button>
+            <button onClick={incrementQuantity}>+</button>
           </div>
-          <Row justify="center" align="center" css={{ marginTop: "10px" }}>
-            <button
-              onClick={handleAddToCart}
-              style={{
-                backgroundColor: "#ADD8E6",
-                color: "#FFFFFF",
-                padding: "5px 10px",
-                border: "none",
-                borderRadius: "5px",
-                height: "35px"
-              }}
-            >
-              Ajouter au panier
-            </button>
+          <Row justify="center" align="center" style={{ marginTop: "10px" }}>
+            <button onClick={handleAddToCart}>Add to Cart</button>
+            <Link href="/ar"> {/* Remplacez "/ar-page" par le chemin de votre page AR */}
+              <a>
+                <button>AR</button>
+              </a>
+            </Link>
             <Spacer x={1} />
-            {/* Assurez-vous que cette fonction est correctement définie */}
-            <button
-              onClick={() => activateXR()}
-              style={{
-                backgroundColor: "#ADD8E6",
-                color: "#FFFFFF",
-                padding: "5px 10px",
-                border: "none",
-                borderRadius: "5px",
-                height: "35px"
-              }}
-            >
-              Voir en réalité
-            </button>
+            {isARActive && typeof activateAR === "function" && (
+              <button onClick={activateAR}>AR</button>
+            )}
           </Row>
         </Container>
       </Card.Body>
