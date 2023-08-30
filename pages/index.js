@@ -112,10 +112,6 @@ export default class NextJsCarousel extends Component {
                         <User src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name=" Wattson" pointer/>
                         <p>Lecafé bio est d'excellente qualité. Je vous le recommande</p>
                     </Card><Spacer x={1}/>
-                    <Card css={{ mw: '100%', p: '20px' }}>
-                        <User src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="Ari" pointer/>
-                        <p>Lecafé bio est d'excellente qualité. Je vous le recommande</p>
-                    </Card>
                   </Row>
                 </div>
                    
