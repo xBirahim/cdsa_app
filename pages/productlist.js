@@ -33,7 +33,7 @@ const ProductList = () => {
 
   const handleAddToCart = (item) => {
     dispatch(addToCart(item));
-    toast.success(`Item "${item.name}" added to cart!`);
+    toast.success(`"${item.name}" à été ajouté au panier!`);
   };
 
   const activateAR = () => {

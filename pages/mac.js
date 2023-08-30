@@ -31,7 +31,7 @@ const Mac = () => {
 
   const handleAddToCart = (item) => {
     dispatch(addToCart(item));
-    toast.success(`Item "${item.name}" added to the cart!`);
+    toast.success(` "${item.name}" added to the cart!`);
   };
 
   return (
