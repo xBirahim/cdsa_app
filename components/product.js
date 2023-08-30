@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Card, Container, Text, Spacer, Row } from "@nextui-org/react";
 import Link from "next/link"; // Importez le composant Link depuis Next.js
+import { Button } from "@nextui-org/react";
 
 const Product = ({ text, price, imageLink, name, onAddToCart, id, isARActive, activateAR }) => {
   const [quantity, setQuantity] = useState(0);
@@ -44,14 +45,13 @@ const Product = ({ text, price, imageLink, name, onAddToCart, id, isARActive, ac
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <button onClick={decrementQuantity}>-</button>
             <span style={{ margin: "0 5px" }}>{quantity}</span>
-            <button onClick={incrementQuantity}>+</button>
+            <button onClick={incrementQuantity} >+</button>
           </div>
           <Row justify="center" align="center" style={{ marginTop: "10px" }}>
-            <button onClick={handleAddToCart}>Add to Cart</button>
+            <Button color="success" onClick={handleAddToCart} size="xs" rounded>Panier</Button>
+      <       Spacer y={0.5} />
             <Link href="/ar"> {/* Remplacez "/ar-page" par le chemin de votre page AR */}
-              <a>
-                <button>AR</button>
-              </a>
+            <Button size="xs" rounded>AR</Button>
             </Link>
             <Spacer x={1} />
             {isARActive && typeof activateAR === "function" && (

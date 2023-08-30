@@ -3,7 +3,6 @@ import { Modal, Button, Text, Input, Row, Checkbox, Radio } from "@nextui-org/re
 import axios from "axios"; // Importez axios pour effectuer des requêtes API
 import { useRouter } from "next/router"; // Importez useRouter pour gérer les redirections
 import useAuthStore from "../utils/store";
-import bcrypt from "bcryptjs";
 
 export default function App({ closeModal }) {
   const [visible, setVisible] = useState(false);
@@ -22,41 +21,39 @@ export default function App({ closeModal }) {
     try {
       console.log("Trying to login with:");
       console.log("Login:", login);
+      console.log("Password:", password);
   
       const response = await axios.get(
-        `https://64e3bc10bac46e480e7923a0.mockapi.io/revendeur?email=${login}`
+        `https://64e3bc10bac46e480e7923a0.mockapi.io/revendeur?email=${login}&password=${password}`
       );
-  
+
       const users = response.data;
-  
+
       console.log(users);
-  
-      const foundUser = users.find((user) => user.email === login);
-  
+
+      const foundUser = users.find(user => user.email === login && user.password === password);
+      
+      console.log(response);
+      // Si les données sont correctes, effectuez la redirection ici
       if (foundUser) {
-        const passwordMatches = await bcrypt.compare(password, foundUser.password);
-  
-        if (passwordMatches) {
-          addUser(foundUser);
-          console.log("role:", foundUser.role);
-          setVisible(false);
-  
-          if (foundUser.role === "") {
-            router.push("/mac");
-          } else if (foundUser.role === "client") {
-            router.push("/productlist");
-          }
-        } else {
-          setLoginError(true);
+
+        addUser(foundUser)
+
+        setVisible(false)
+        // Redirection vers la page appropriée en fonction du rôle
+        if (foundUser.role == "") {
+          router.push("/mac");
+        } else if (foundUser.role == "client"){
+          router.push("/productlist");
         }
       } else {
+        // Affichage d'une erreur de connexion
         setLoginError(true);
       }
     } catch (error) {
       console.error("Erreur lors de l'authentification :", error);
-    }
+    } 
   };
-  
 
   return (
     <Modal

@@ -55,6 +55,28 @@ const ARScene = () => {
 
     if (isARActive) {
       initAR();
+    } else {
+      // Clear the scene and dispose of resources when AR is not active
+      if (controlsRef.current) {
+        controlsRef.current.dispose();
+        controlsRef.current = undefined;
+      }
+      if (cubeRef.current) {
+        cubeRef.current.geometry.dispose();
+        cubeRef.current.material.dispose();
+      }
+      if (sceneRef.current) {
+        while (sceneRef.current.children.length > 0) {
+          const child = sceneRef.current.children[0];
+          sceneRef.current.remove(child);
+          if (child.dispose) {
+            child.dispose();
+          }
+        }
+      }
+      if (cameraRef.current) {
+        cameraRef.current = undefined;
+      }
     }
   }, [isARActive]);
 
@@ -72,19 +94,8 @@ const ARScene = () => {
       videoRef.current.pause();
       setIsARActive(false);
 
-      // Clear the scene and dispose of resources
-      if (controlsRef.current) {
-        controlsRef.current.dispose();
-      }
-      if (cubeRef.current) {
-        cubeRef.current.geometry.dispose();
-        cubeRef.current.material.dispose();
-      }
-      if (sceneRef.current) {
-        while (sceneRef.current.children.length > 0) {
-          sceneRef.current.remove(sceneRef.current.children[0]);
-        }
-      }
+      // Close the modal
+      closeModal();
     }
   };
 

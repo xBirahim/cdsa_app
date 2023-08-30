@@ -77,6 +77,11 @@ const NavigationBar = () => {
             },
           }}
         >
+           <img
+              src="https://us.123rf.com/450wm/gorbovoi81/gorbovoi811311/gorbovoi81131100001/23764262-une-tasse-de-caf%C3%A9-fumant-et-des-grains-de-caf%C3%A9-dessin.jpg"
+              alt="Café"
+              style={{ width: "24px", height: "24px", marginRight: "8px" }}
+            />
           <Text b color="inherit" hideIn="xs">
             Paye ton Kawa
           </Text>

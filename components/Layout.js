@@ -4,17 +4,15 @@ import { NextUIProvider, Spacer } from "@nextui-org/react";
 import Head from "next/head";
 
 const Layout = ({ children }) => {
-
   return (
     <NextUIProvider>
       <Head>
-        <title>MSPR</title>
+        <title>PayeTonKAWA</title>
         <meta
           name="description"
           content="mspr"
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="https://us.123rf.com/450wm/gorbovoi81/gorbovoi811311/gorbovoi81131100001/23764262-une-tasse-de-caf%C3%A9-fumant-et-des-grains-de-caf%C3%A9-dessin.jpg" />
       </Head>
       <NavigationBar />
       <Spacer y={2} />
