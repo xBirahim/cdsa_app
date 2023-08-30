@@ -29,7 +29,7 @@ const Product = ({ text, price, imageLink, name, onAddToCart, id, isARActive, ac
         <Container>
           <Card.Image
             showSkeleton
-            src={imageLink || "https://www.example.com/default-image.jpg"}
+            src={imageLink}
             objectFit="cover"
             width="200px"
             height="150px"

@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer style={footerStyle}>
       <div style={contentContainer}>
-        <p style={textStyle}>© 2023 Mon Entreprise. Tous droits réservés. | Numéro de téléphone : 123-456-789 | Email : contact@monentreprise.com</p>
+        <p style={textStyle}>© 2023 PayeTonKAWA. Tous droits réservés. | Numéro de téléphone : 09 99 99 20 20 | Email : ptk@contact.com</p>
       </div>
     </footer>
   );

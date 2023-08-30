@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Button, Text, Input, Row, Checkbox, Radio } from "@nextui-org/react";
-import { useRouter } from "next/router";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import { Modal, Button, Text, Input, Radio } from '@nextui-org/react';
+import { toast, ToastContainer } from 'react-toastify';
+import axios from 'axios';
+import QRCode from 'qrcode';
+import bcrypt from 'bcryptjs';
+import { useRouter } from 'next/router';
+
+const SALT_ROUNDS = 10;
 
 export default function App({ closeModal }) {
-  const [nom, setNom] = useState("");
-  const [prenom, setPrenom] = useState("");
-  const [login, setLogin] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [societe, setSociete] = useState("");
+  const [nom, setNom] = useState('');
+  const [prenom, setPrenom] = useState('');
+  const [login, setLogin] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [societe, setSociete] = useState('');
   const [isRevendeur, setIsRevendeur] = useState(false);
   const router = useRouter();
 
@@ -18,39 +23,99 @@ export default function App({ closeModal }) {
     setVisible(true);
   }, []);
 
+  const isStrongPassword = password => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return regex.test(password);
+  };
+
+  const isValidEmail = email => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
   const handleSignIn = async () => {
+    if (!isValidEmail(email)) {
+      toast.error('Invalid email address.');
+      return;
+    }
+
+    if (!isStrongPassword(password)) {
+      toast.error('Password must be at least 8 characters long and include uppercase, lowercase, digits, and special characters.');
+      return;
+    }
+
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
     const user = {
       nom,
       prenom,
       login,
       email,
-      password,
-      societe: isRevendeur ? societe : "",
-      role: isRevendeur ? "revendeur" : "client",
+      password: hashedPassword,
+      societe: isRevendeur ? societe : '',
+      role: isRevendeur ? 'revendeur' : 'client',
     };
 
     try {
       const response = await axios.post(
-        "https://64e3bc10bac46e480e7923a0.mockapi.io/revendeur",
+        'https://64e3bc10bac46e480e7923a0.mockapi.io/revendeur',
         user
       );
 
       if (response.status === 201) {
         if (isRevendeur) {
-          router.push("/mac");
+          const qrDataURL = await QRCode.toDataURL(email);
+          sendEmailWithQR(email, qrDataURL);
+          router.push('/mac');
         } else {
-          router.push("/productlist");
+          router.push('/productlist');
         }
       } else {
-        console.error("Registration failed.");
+        toast.error('Registration failed.');
       }
-      closeModal(); // Close the modal after redirection
+      closeModal();
     } catch (error) {
-      console.error("An error occurred:", error);
+      toast.error('An error occurred.');
     }
   };
 
-  
+  const sendEmailWithQR = async (toEmail, qrDataURL) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:3001/send-email',
+        { toEmail, qrDataURL }
+      );
+
+      if (response.status === 200) {
+        toast.success('Email sent successfully.');
+      } else {
+        toast.error('Failed to send email.');
+      }
+    } catch (error) {
+      toast.error('An error occurred while sending the email.');
+    }
+  };
+
+  const handleSendEmailManually = async () => {
+    const emailToSend = 'example@example.com';
+    const qrCodeDataURL = 'https://example.com/qr-code.png';
+
+    try {
+      const response = await axios.post(
+        'http://localhost:3001/send-email',
+        { toEmail: emailToSend, qrDataURL: qrCodeDataURL }
+      );
+
+      if (response.status === 200) {
+        toast.success('Email sent manually.');
+      } else {
+        toast.error('Failed to send email.');
+      }
+    } catch (error) {
+      toast.error('An error occurred while sending the email.');
+    }
+  };
+
   return (
     <Modal
       closeButton
@@ -68,7 +133,7 @@ export default function App({ closeModal }) {
             PayeTonKAWA
           </Text>
           <br />
-          <Text size={16}>Le café c'est la vie</Text>
+          <Text size={16}>Le Café c'est la vie</Text>
         </Text>
       </Modal.Header>
       <Modal.Body>
@@ -78,7 +143,7 @@ export default function App({ closeModal }) {
           fullWidth
           color="primary"
           size="lg"
-          placeholder="Nom"
+          placeholder="Name"
           value={nom}
           onChange={e => setNom(e.target.value)}
         />
@@ -88,7 +153,7 @@ export default function App({ closeModal }) {
           fullWidth
           color="primary"
           size="lg"
-          placeholder="Prénom"
+          placeholder="First Name"
           value={prenom}
           onChange={e => setPrenom(e.target.value)}
         />
@@ -98,7 +163,7 @@ export default function App({ closeModal }) {
           fullWidth
           color="primary"
           size="lg"
-          placeholder="Login"
+          placeholder="Username"
           value={login}
           onChange={e => setLogin(e.target.value)}
         />
@@ -113,6 +178,7 @@ export default function App({ closeModal }) {
           onChange={e => setEmail(e.target.value)}
         />
         <Input
+          type="password"
           clearable
           bordered
           fullWidth
@@ -121,34 +187,28 @@ export default function App({ closeModal }) {
           placeholder="Password"
           value={password}
           onChange={e => setPassword(e.target.value)}
+          error={!isStrongPassword(password)}
         />
-        {isRevendeur && (
+          {isRevendeur && (
           <Input
             clearable
             bordered
             fullWidth
             color="primary"
             size="lg"
-            placeholder="Société"
+            placeholder="Company"
             value={societe}
             onChange={e => setSociete(e.target.value)}
           />
         )}
-        <Row justify="space-between">
-          <Checkbox>
-            <Text size={14}>Remember me</Text>
-          </Checkbox>
-          <Text size={14}>Forgot password?</Text>
-        </Row>
-
         <Radio.Group
-          value={isRevendeur ? "revendeur" : "client"}
-          onChange={value => setIsRevendeur(value === "revendeur")}
-          label="Qui etes vous?"
+          value={isRevendeur ? 'revendeur' : 'client'}
+          onChange={value => setIsRevendeur(value === 'revendeur')}
+          label="Qui êtes vous?"
           orientation="horizontal"
         >
           <Radio value="revendeur">Revendeur</Radio>
-          <Radio value="client">Client</Radio>
+          <Radio value="client">client</Radio>
         </Radio.Group>
       </Modal.Body>
       <Modal.Footer>
@@ -158,7 +218,11 @@ export default function App({ closeModal }) {
         <Button auto onPress={handleSignIn} color="Green">
           Sign in
         </Button>
+        <Button auto onPress={handleSendEmailManually} color="Primary">
+          Send Email Manually
+        </Button>
       </Modal.Footer>
+      <ToastContainer />
     </Modal>
   );
 }

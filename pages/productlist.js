@@ -49,7 +49,7 @@ const ProductList = () => {
               text={product.name}
               price={product.price}
               description={product.description}
-              imageLink={product.image}
+              imageLink={product.img}
               onAddToCart={() => handleAddToCart(product)}
               isARActive={isARActive}
               activateAR={activateAR}
