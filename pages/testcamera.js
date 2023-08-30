@@ -24,7 +24,6 @@ export default function CameraTest() {
     } catch (error) {
       console.log(error);
     }
-    
   }
 
   return (

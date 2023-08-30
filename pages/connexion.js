@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Text, Input, Row, Checkbox, Radio } from "@nextui-org/react";
-import axios from "axios"; // Importez axios pour effectuer des requêtes API
-import { useRouter } from "next/router"; // Importez useRouter pour gérer les redirections
+import { Modal, Button, Text, Input } from "@nextui-org/react";
+import axios from "axios";
+import { useRouter } from "next/router";
 import useAuthStore from "../utils/store";
+import bcrypt from "bcryptjs";
+
 
 export default function App({ closeModal }) {
   const [visible, setVisible] = useState(false);
-  const [isRevendeur, setIsRevendeur] = useState(false); // État du bouton radio
-  const [login, setLogin] = useState(""); // État du champ de connexion
-  const [password, setPassword] = useState(""); // État du champ de mot de passe
-  const [loginError, setLoginError] = useState(false); // État pour gérer les erreurs de connexion
-  const router = useRouter(); // Utilisez le hook useRouter pour les redirections
-  const { userProfile, addUser, removeUser } = useAuthStore();
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState(false);
+  const router = useRouter();
+  const { addUser } = useAuthStore();
+  const SALT_ROUNDS = 10;
 
   useEffect(() => {
     setVisible(true);
@@ -19,40 +21,35 @@ export default function App({ closeModal }) {
 
   const handleLogin = async () => {
     try {
-      console.log("Trying to login with:");
-      console.log("Login:", login);
-      console.log("Password:", password);
-  
       const response = await axios.get(
-        `https://64e3bc10bac46e480e7923a0.mockapi.io/revendeur?email=${login}&password=${password}`
+        `https://64e3bc10bac46e480e7923a0.mockapi.io/revendeur?email=${login}`
       );
 
       const users = response.data;
+      const foundUser = users.find((user) => user.email === login);
 
-      console.log(users);
-
-      const foundUser = users.find(user => user.email === login && user.password === password);
-      
-      console.log(response);
-      // Si les données sont correctes, effectuez la redirection ici
       if (foundUser) {
+        const isPasswordValid = await bcrypt.compare(password, foundUser.password);
 
-        addUser(foundUser)
+        if (isPasswordValid) {
+          addUser(foundUser);
+          setLoginError(false);
 
-        setVisible(false)
-        // Redirection vers la page appropriée en fonction du rôle
-        if (foundUser.role == "") {
-          router.push("/mac");
-        } else if (foundUser.role == "client"){
-          router.push("/productlist");
+          setVisible(false);
+          if (foundUser.role === "") {
+            router.push("/mac");
+          } else if (foundUser.role === "client") {
+            router.push("/productlist");
+          }
+        } else {
+          setLoginError(true);
         }
       } else {
-        // Affichage d'une erreur de connexion
         setLoginError(true);
       }
     } catch (error) {
       console.error("Erreur lors de l'authentification :", error);
-    } 
+    }
   };
 
   return (
@@ -100,7 +97,7 @@ export default function App({ closeModal }) {
         <Button auto flat color="error" onPress={closeModal}>
           Fermer
         </Button>
-        <Button auto onPress={handleLogin} color="Green">
+        <Button auto onPress={handleLogin} color="green">
           Se connecter
         </Button>
       </Modal.Footer>

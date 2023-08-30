@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Text, Input, Radio } from '@nextui-org/react';
 import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import QRCode from 'qrcode';
 import bcrypt from 'bcryptjs';
+import { sendConfirmationMail } from "lib/api";
 import { useRouter } from 'next/router';
 
 const SALT_ROUNDS = 10;
@@ -17,6 +19,14 @@ export default function App({ closeModal }) {
   const [societe, setSociete] = useState('');
   const [isRevendeur, setIsRevendeur] = useState(false);
   const router = useRouter();
+
+  const onSubmit = async () => {
+    try {
+      await sendConfirmationMail({to: email});
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -39,10 +49,10 @@ export default function App({ closeModal }) {
       return;
     }
 
-    if (!isStrongPassword(password)) {
-      toast.error('Password must be at least 8 characters long and include uppercase, lowercase, digits, and special characters.');
-      return;
-    }
+    //if (!isStrongPassword(password)) {
+    //  toast.error('Password must be at least 8 characters long and include uppercase, lowercase, digits, and special characters.');
+    //  return;
+    //}
 
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
@@ -70,6 +80,9 @@ export default function App({ closeModal }) {
         } else {
           router.push('/productlist');
         }
+
+        onSubmit();
+        
       } else {
         toast.error('Registration failed.');
       }
@@ -189,7 +202,7 @@ export default function App({ closeModal }) {
           onChange={e => setPassword(e.target.value)}
           error={!isStrongPassword(password)}
         />
-          {isRevendeur && (
+        {isRevendeur && (
           <Input
             clearable
             bordered
@@ -215,11 +228,8 @@ export default function App({ closeModal }) {
         <Button auto flat color="error" onPress={closeModal}>
           Close
         </Button>
-        <Button auto onPress={handleSignIn} color="Green">
+        <Button auto onPress={handleSignIn} color="green">
           Sign in
-        </Button>
-        <Button auto onPress={handleSendEmailManually} color="Primary">
-          Send Email Manually
         </Button>
       </Modal.Footer>
       <ToastContainer />

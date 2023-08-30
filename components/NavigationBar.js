@@ -7,6 +7,7 @@ import Panier from "../pages/panier"; // Mettez à jour le chemin vers le compos
 import Connexion from "../pages/connexion"; // Renommez le composant importé
 import useAuthStore from "../utils/store";
 import { useRouter } from "next/router";
+import { Chart } from "react-iconly";
 
 const NavigationBar = () => {
   const [appVisible, setAppVisible] = useState(false);
@@ -95,6 +96,7 @@ const NavigationBar = () => {
           <Navbar.Link href="/">Home</Navbar.Link>
           <Navbar.Link href="/productlist">Nos Cafés</Navbar.Link>
           <Navbar.Link href="/mac">Machine à café</Navbar.Link>
+          <Navbar.Link href="/mescommandes">Mes commandes</Navbar.Link>
         </Navbar.Content>
         <Navbar.Content
           css={{
@@ -104,7 +106,10 @@ const NavigationBar = () => {
             },
           }}
         >
-          {userProfile ? (
+          {userProfile ? (<>
+            <Button color="Black" light onPress={() => setPanierVisible(true)}>
+              Panier
+            </Button>
             <Dropdown placement="bottom-right">
               <Navbar.Item>
                 <Dropdown.Trigger>
@@ -135,7 +140,7 @@ const NavigationBar = () => {
                 </Dropdown.Item>
                 <Dropdown.Item key="team_settings">Team Settings</Dropdown.Item>
                 <Dropdown.Item key="analytics" withDivider>
-                  Analytics
+                  My orders
                 </Dropdown.Item>
                 <Dropdown.Item key="system">System</Dropdown.Item>
                 <Dropdown.Item key="configurations">
@@ -148,7 +153,7 @@ const NavigationBar = () => {
                   <Button onPress={handleLogout} color={"error"}>Log Out</Button>
                 </Dropdown.Item>
               </Dropdown.Menu>
-            </Dropdown>
+          </Dropdown></>
           ) : (
             <Dropdown placement="bottom-right">
               <Navbar.Item>
@@ -179,11 +184,7 @@ const NavigationBar = () => {
                     Connexion
                   </Button>
                 </Dropdown.Item>
-                <Dropdown.Item key="Panier" css={{ height: "$18" }}>
-                  <Button color="Black" onPress={() => setPanierVisible(true)}>
-                    Panier
-                  </Button>
-                </Dropdown.Item>
+
               </Dropdown.Menu>
             </Dropdown>
           )}
