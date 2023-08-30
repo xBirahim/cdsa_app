@@ -9,4 +9,4 @@ const AR = () => {
   );
 };
 
-export default AR;
+export default AR;  
